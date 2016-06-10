@@ -94,8 +94,86 @@ size_t rioWriteBulkDouble(rio *r, double d) {
 }
 ```
 
+##  rdbSave 和 rdbSaveBackground
+
+rdbSave会阻塞主进程
+处理每一个数据库，使用迭代器把数据库中的数据重新写入磁盘
+```cpp
+// 遍历所有数据库，保存它们的数据
+    for (j = 0; j < server.dbnum; j++) {
+        // 指向数据库
+        redisDb *db = server.db+j;
+        // 指向数据库 key space
+        dict *d = db->dict;
+        // 数据库为空， pass ，处理下个数据库
+        if (dictSize(d) == 0) continue;
+
+        // 创建迭代器
+        di = dictGetSafeIterator(d);
+        if (!di) {
+            fclose(fp);
+            return REDIS_ERR;
+        }
+
+        /* Write the SELECT DB opcode */
+        // 记录正在使用的数据库的号码
+        if (rdbSaveType(&rdb,REDIS_RDB_OPCODE_SELECTDB) == -1) goto werr;
+        if (rdbSaveLen(&rdb,j) == -1) goto werr;
+
+        /* Iterate this DB writing every entry */
+        // 将数据库中的所有节点保存到 RDB 文件
+        while((de = dictNext(di)) != NULL) {
+            // 取出键
+            sds keystr = dictGetKey(de);
+            // 取出值
+            robj key,
+                 *o = dictGetVal(de);
+            long long expire;
+
+            initStaticStringObject(key,keystr);
+            // 取出过期时间
+            expire = getExpire(db,&key);
+            if (rdbSaveKeyValuePair(&rdb,&key,o,expire,now) == -1) goto werr;
+        }
+        dictReleaseIterator(di);
+    }
+    di = NULL; /* So that we don't release it again on error. */
+```
 
 
+rdbSaveBackground创建子进程处理持久化操作，主进程继续处理事务，会存在内存数据和持久化数据不一样情况
+设置数据库为 dirty，创建子进程调用 rdbSave
+```
+// 修改服务器状态
+    server.dirty_before_bgsave = server.dirty;
+
+    // 开始时间
+    start = ustime();
+    // 创建子进程
+    if ((childpid = fork()) == 0) {
+        int retval;
+
+        /* Child */
+        // 子进程不接收网络数据
+        if (server.ipfd > 0) close(server.ipfd);
+        if (server.sofd > 0) close(server.sofd);
+
+        // 保存数据
+        retval = rdbSave(filename);
+        if (retval == REDIS_OK) {
+            size_t private_dirty = zmalloc_get_private_dirty();
+
+            if (private_dirty) {
+                redisLog(REDIS_NOTICE,
+                    "RDB: %lu MB of memory used by copy-on-write",
+                    private_dirty/(1024*1024));
+            }
+        }
+
+        // 退出子进程
+        exitFromChild((retval == REDIS_OK) ? 0 : 1);
+    }
+```
 
 
 
