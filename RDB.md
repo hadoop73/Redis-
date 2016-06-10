@@ -174,9 +174,197 @@ rdbSaveBackground创建子进程处理持久化操作，主进程继续处理事
         exitFromChild((retval == REDIS_OK) ? 0 : 1);
     }
 ```
+##  保存到磁盘
+按照特定的格式，在 RDB 文件中写入文件头
+```cpp
+// 以 "REDIS <VERSION>" 格式写入文件头，以及 RDB 的版本
+snprintf(magic,sizeof(magic),"REDIS%04d",REDIS_RDB_VERSION);
+if (rdbWriteRaw(&rdb,magic,9) == -1) goto werr;
+```
+遍历所有的数据库，首先把数据库编号写入，再继续写入数据；根据数据库，创建迭代器，获取所有的 key-value 对，再写入,如 rdbSave 代码
+
+保存 key-value 对，会判断时间期限是否过期，如果过期不会再保存到文件
+总的是，先写入 value 的类型，再写入 key-value
+```cpp
+int rdbSaveKeyValuePair(rio *rdb, robj *key, robj *val,
+                        long long expiretime, long long now)
+{
+    /* Save the expire time */
+    // 保存过期时间
+    if (expiretime != -1) {
+        /* If this key is already expired skip it */
+        // key 已过期，直接跳过
+        if (expiretime < now) return 0;
+
+        if (rdbSaveType(rdb,REDIS_RDB_OPCODE_EXPIRETIME_MS) == -1) return -1;  // 用来表示过期键,也就是调用 rio 的写入函数，写入一个字节
+        if (rdbSaveMillisecondTime(rdb,expiretime) == -1) return -1; // 写入过期时间
+    }
+
+    /* Save type, key, value */
+    // 保存值类型,根据 Value 的类型写入
+    if (rdbSaveObjectType(rdb,val) == -1) return -1;
+    // 保存 key
+    if (rdbSaveStringObject(rdb,key) == -1) return -1;
+    // 保存 value
+    if (rdbSaveObject(rdb,val) == -1) return -1;
+
+    return 1;
+}
+```
+因为 value 的类型为 robj，可以直接获取 type
+```cpp
+/*
+ * Redis 对象
+ */
+typedef struct redisObject {
+
+    // 类型
+    unsigned type:4;
+
+    // 不使用(对齐位)
+    unsigned notused:2;
+
+    // 编码方式
+    unsigned encoding:4;
+
+    // LRU 时间（相对于 server.lruclock）
+    unsigned lru:22;
+
+    // 引用计数
+    int refcount;
+
+    // 指向对象的值
+    void *ptr;
+
+} robj;
+```
+
+
+## 迭代器
+```cpp
+typedef struct dictIterator {
+
+    // 正在迭代的字典
+    dict *d;
+
+    int table,              // 正在迭代的哈希表的号码（0 或者 1）
+        index,              // 正在迭代的哈希表数组的索引
+        safe;               // 是否安全？
+
+    dictEntry *entry,       // 当前哈希节点
+              *nextEntry;   // 当前哈希节点的后继节点
+} dictIterator;
+```
+可以从迭代起中获取 dictEntry 节点，key-alue 对存放在节点中
+```cpp
+/*
+ * 哈希表节点
+ */
+typedef struct dictEntry {
+
+    // 键
+    void *key;
+
+    // 值
+    union {
+        void *val;
+        uint64_t u64;
+        int64_t s64;
+    } v;
+
+    // 链往后继节点
+    struct dictEntry *next;
+
+} dictEntry;
+```
+
+
+##  load RDB 文件
+通过 rio 的接口来把 rdb 文件的数据载入到内存。
+```cpp
+// 初始化 rdb 文件
+rioInitWithFile(&rdb,fp);
+```
+先读取 type 确定接下来内容的类型，再读取内容
+读取内容分为 `rdbLoadLen`,`rdbLoadStringObject`,`rdbLoadObject`,通过 `dbAdd(db,key,val)` 添加到内存
+`rdbLoadLen` 用于从文件中读取一个整数值
+```cpp
+uint32_t rdbLoadLen(rio *rdb, int *isencoded) {
+    unsigned char buf[2];
+    uint32_t len;
+    int type;
+
+    if (isencoded) *isencoded = 0;
+    if (rioRead(rdb,buf,1) == 0) return REDIS_RDB_LENERR; // 先读取一个字节用来表示值的类型
+    type = (buf[0]&0xC0)>>6;
+    if (type == REDIS_RDB_ENCVAL) {
+        /* Read a 6 bit encoding type. */
+        if (isencoded) *isencoded = 1;
+        return buf[0]&0x3F;
+    } else if (type == REDIS_RDB_6BITLEN) {
+        /* Read a 6 bit len. */
+        return buf[0]&0x3F;
+    } else if (type == REDIS_RDB_14BITLEN) {
+        /* Read a 14 bit len. */
+        if (rioRead(rdb,buf+1,1) == 0) return REDIS_RDB_LENERR;
+        return ((buf[0]&0x3F)<<8)|buf[1];
+    } else {
+        /* Read a 32 bit len. */
+        if (rioRead(rdb,&len,4) == 0) return REDIS_RDB_LENERR;
+        return ntohl(len);
+    }
+}
+```
+`rdbLoadStringObject` 读取 key
+用于从文件中读取一个字符串对象，先获取要读取字符串的长度 len，再用 rioRead 读取 len个长度的字符串，通过 sdn 构造
+```
+robj *rdbLoadStringObject(rio *rdb) {
+    return rdbGenericLoadStringObject(rdb,0);
+}
+
+/*
+ * 根据编码 encode ，从 rdb 文件中读取字符串，并返回字符串对象
+ */
+robj *rdbGenericLoadStringObject(rio *rdb, int encode) {
+    int isencoded;
+    uint32_t len;
+    sds val;
+
+    // 获取字符串的长度
+    len = rdbLoadLen(rdb,&isencoded);
+    if (isencoded) {
+        switch(len) {
+        case REDIS_RDB_ENC_INT8:
+        case REDIS_RDB_ENC_INT16:
+        case REDIS_RDB_ENC_INT32:
+            // 字节串是整数，创建整数对象并返回
+            return rdbLoadIntegerObject(rdb,len,encode);
+        case REDIS_RDB_ENC_LZF:
+            // 字节串是被 lzf 算法压缩的字符串
+            return rdbLoadLzfStringObject(rdb);
+        default:
+            redisPanic("Unknown RDB encoding type");
+        }
+    }
+
+    if (len == REDIS_RDB_LENERR) return NULL;
+
+    // 创建一个指定长度的 sds
+    val = sdsnewlen(NULL,len);
+    if (len && rioRead(rdb,val,len) == 0) {
+        sdsfree(val);
+        return NULL;
+    }
+    // 根据 sds ，创建字符串对象
+    return createObject(REDIS_STRING,val);
+}
+```
+`rdbLoadObject` 读取 value
+读取的对象包括 字符串，set，哈希表，压缩列表等。
 
 
 
+`dbAdd(db,key,val)`
 
 
 
