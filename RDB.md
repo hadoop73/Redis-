@@ -143,7 +143,7 @@ rdbSave会阻塞主进程
 
 rdbSaveBackground创建子进程处理持久化操作，主进程继续处理事务，会存在内存数据和持久化数据不一样情况
 设置数据库为 dirty，创建子进程调用 rdbSave
-```
+```cpp
 // 修改服务器状态
     server.dirty_before_bgsave = server.dirty;
 
@@ -317,7 +317,7 @@ uint32_t rdbLoadLen(rio *rdb, int *isencoded) {
 ```
 `rdbLoadStringObject` 读取 key
 用于从文件中读取一个字符串对象，先获取要读取字符串的长度 len，再用 rioRead 读取 len个长度的字符串，通过 sdn 构造
-```
+```cpp
 robj *rdbLoadStringObject(rio *rdb) {
     return rdbGenericLoadStringObject(rdb,0);
 }
