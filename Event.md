@@ -107,4 +107,94 @@ long long aeCreateTimeEvent(aeEventLoop *eventLoop, long long milliseconds,
 
 对文件事件和时间事件的处理都是同步、有序、原子地执行，服务器不会中途中断事件处理，也不会对事件进行抢占。
 
+##  `I/O` 多路复用
+`epoll` 监听套接字，是否有客户端发送命令，建立连接。也就是 `epoll` 多路复用的应用。
+```cpp
+/*
+ * 获取可执行事件
+ */
+static int aeApiPoll(aeEventLoop *eventLoop, struct timeval *tvp) {
+    aeApiState *state = eventLoop->apidata;
+    int retval, numevents = 0;
+
+    // 等待时间
+    retval = epoll_wait(state->epfd,state->events,eventLoop->setsize,
+            tvp ? (tvp->tv_sec*1000 + tvp->tv_usec/1000) : -1);
+
+    // 有至少一个事件就绪？
+    if (retval > 0) {
+        int j;
+
+        // 为已就绪事件设置相应的模式
+        // 并加入到 eventLoop 的 fired 数组中
+        numevents = retval;
+        for (j = 0; j < numevents; j++) {
+            int mask = 0;
+            struct epoll_event *e = state->events+j;
+
+            if (e->events & EPOLLIN) mask |= AE_READABLE;
+            if (e->events & EPOLLOUT) mask |= AE_WRITABLE;
+            if (e->events & EPOLLERR) mask |= AE_WRITABLE;
+            if (e->events & EPOLLHUP) mask |= AE_WRITABLE;
+
+            eventLoop->fired[j].fd = e->data.fd;
+            eventLoop->fired[j].mask = mask;
+        }
+    }
+
+    // 返回已就绪事件个数
+    return numevents;
+}
+```
+
+##  为文件时间绑定处理器
+也就是调用 `aeCreateFileEvent` 或 `aeCreateTimeEvent` 创建文件事件或者时间事件。
+在 `networking.c` 中，创建 `redis` 客户端的时候，会有创建应答文件事件
+```cpp
+/*
+ * 创建新的客户端实例
+ */
+redisClient *createClient(int fd) {
+    redisClient *c = zmalloc(sizeof(redisClient));
+
+    /* passing -1 as fd it is possible to create a non connected client.
+     * This is useful since all the Redis commands needs to be executed
+     * in the context of a client. When commands are executed in other
+     * contexts (for instance a Lua script) we need a non connected client. */
+    // 因为 Redis 命令总在客户端的上下文中执行，
+    // 有时候为了在服务器内部执行命令，需要使用伪客户端来执行命令
+    // 在 fd == -1 时，创建的客户端为伪终端
+    if (fd != -1) {
+        anetNonBlock(NULL,fd);
+        anetTcpNoDelay(NULL,fd);
+        if (aeCreateFileEvent(server.el,fd,AE_READABLE, readQueryFromClient, c) == AE_ERR)
+        {
+            close(fd);
+            zfree(c);
+            return NULL;
+        }
+    }
+    return c;
+}
+```
+在添加回复，会先创建 `send` 相关文件事件
+```cpp
+int prepareClientToWrite(redisClient *c) {
+    if (c->flags & REDIS_LUA_CLIENT) return REDIS_OK;
+    if (c->fd <= 0) return REDIS_ERR; /* Fake client */
+    if (c->bufpos == 0 && listLength(c->reply) == 0 &&
+        (c->replstate == REDIS_REPL_NONE || c->replstate == REDIS_REPL_ONLINE) &&
+        aeCreateFileEvent(server.el, c->fd, AE_WRITABLE, sendReplyToClient, c) == AE_ERR)
+        return REDIS_ERR;
+    return REDIS_OK;
+}
+```
+
+
+
+
+
+
+
+
 
