@@ -85,8 +85,9 @@ grammar_cjkRuby: true
 在 C++ 出现之前，很多代码都是 C 语言写的，为了更好的支持原来的 C 代码和已经写好的C语言库，在 C++ 中尽可能支持 C。
 
 
-
-
+##  `Reactor` 模式
+[使用I/O多路复用技术--select实现Reactor模式][15]
+[两种高性能I/O设计模式(Reactor/Proactor)的比较][16]
 
 
 
@@ -97,6 +98,16 @@ grammar_cjkRuby: true
 
 
 ##  同步异步
+[网络编程释疑之：同步，异步，阻塞，非阻塞][17]
+[怎样理解阻塞非阻塞与同步异步的区别][18]
+
+
+阻塞，非阻塞：进程/线程访问数据是否就绪，进程/线程是否需要等待
+同步，异步：关注的是 **消息通信机制**；
+同步：在发出一个调用时，在没有得到结果之前，该调用不会返回，但是一旦调用返回，就得到返回值。
+异步：调用在发出后，调用直接返回，所以没有返回结果；而是有被调用者通过状态、通知来通知调用者，或者通过回调函数处理这个调用。
+
+
 
 ##  管道，进程通信
 
@@ -121,3 +132,7 @@ grammar_cjkRuby: true
   [12]: http://www.cnblogs.com/singa/archive/2008/09/24/1297821.html
   [13]: http://blog.chinaunix.net/uid-23069658-id-3981406.html
   [14]: http://blog.csdn.net/jiqiren007/article/details/5933599
+  [15]: http://www.rudy-yuan.net/archives/137/
+  [16]: http://blog.jobbole.com/59676/
+  [17]: http://yaocoder.blog.51cto.com/2668309/1308899
+  [18]: https://www.zhihu.com/question/19732473
