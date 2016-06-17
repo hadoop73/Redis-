@@ -1,6 +1,6 @@
 ---
 title: C++  总结 
-tags: 新建,模板,小书匠
+tags: C++
 grammar_cjkRuby: true
 ---
 
