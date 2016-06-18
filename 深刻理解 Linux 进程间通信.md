@@ -104,9 +104,124 @@ int mkfifo(const char * pathname, mode_t mode)
 ```
 该函数的第一个参数是一个普通的路径名，也就是创建后 `FIFO` 的名字。第二个参数与打开普通文件的open()函数中的 `mode` 参数相同。如果 `mkfifo` 的第一个参数是一个已经存在的路径名时，会返回 `EEXIST` 错误，所以一般典型的调用代码首先会检查是否返回该错误，如果确实返回该错误，那么只要调用打开 `FIFO` 的函数就可以了。一般文件的 `I/O` 函数都可以用于 `FIFO`，如 `close、read、write` 等等。
  
+
+##  信号
+[进程间通信--信号(进程间通信唯一的异步方式) ][2]
  
- 
- 
+信号是软件层次上对中断机制一种模拟，一种异步通信方式。
+信号可以用来直接进行用户空间进程和内核进程之间的交互，内核进程也可以利用它来通知用户空间进程发生了哪些系统事件。
+
+##  共享内存
+[进程间通信---共享内存 ][3]
+
+共享内存是一最为高效的进程通信方式，进程可以直接读写，不需要拷贝
+
+内核专门留出一块内存区，进程将其映射到自己的私有地址空间；由于多个进程共享一段内存，需要依靠同步机制
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
  
  
@@ -134,4 +249,7 @@ int mkfifo(const char * pathname, mode_t mode)
  
  
 
+
   [1]: http://wenku.baidu.com/link?url=ycw82cnizi12EXDNn3RuTqyIcWThmOmGrwILEkjOcZJgWr9Us5wqB5nlXr6kpQAR10Hb9X2xTBMuSd1f8G_pS_U5FErQDffR0IxXHOVZvlG
+  [2]: http://blog.chinaunix.net/uid-26833883-id-3228615.html
+  [3]: http://blog.chinaunix.net/uid-26833883-id-3230564.html
