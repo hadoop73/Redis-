@@ -35,7 +35,7 @@ size_t zmalloc_allocations_for_size(size_t size);
 
 `Redis` 做了简要封装，实现忽略平台的差异性。同时也加入了内存的统计。
 
-[https://github.com/hadoop73/Redis-/blob/master/imge/memory_struct.png]
+![内存结构图](https://github.com/hadoop73/Redis-/blob/master/imge/memory_struct.png)
 
 
 
