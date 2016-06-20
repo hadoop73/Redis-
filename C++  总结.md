@@ -120,12 +120,20 @@ grammar_cjkRuby: true
 `dst` 和 `src` 重叠，借助 `memcpy` 函数
 
 
+##  柔性数组
+[C/C++ 中的0长数组（柔性数组）][20]
+
+结构体中的 0 长度数组，能够构造变长度的结构体
+
+数组名是一个符号，不占用空间，代表一个偏移量
+
+
 
 
 ##  同步异步
-[网络编程释疑之：同步，异步，阻塞，非阻塞][20]
+[网络编程释疑之：同步，异步，阻塞，非阻塞][21]
 
-[怎样理解阻塞非阻塞与同步异步的区别][21]
+[怎样理解阻塞非阻塞与同步异步的区别][22]
 
 
 阻塞，非阻塞：进程/线程访问数据是否就绪，进程/线程是否需要等待
@@ -163,5 +171,6 @@ grammar_cjkRuby: true
   [17]: http://blog.csdn.net/hackbuteer1/article/details/6789164
   [18]: http://www.cnblogs.com/chenyg32/p/3739564.html
   [19]: http://blog.csdn.net/gpengtao/article/details/7464061/
-  [20]: http://yaocoder.blog.51cto.com/2668309/1308899
-  [21]: https://www.zhihu.com/question/19732473
+  [20]: http://blog.csdn.net/yby4769250/article/details/7294696
+  [21]: http://yaocoder.blog.51cto.com/2668309/1308899
+  [22]: https://www.zhihu.com/question/19732473
