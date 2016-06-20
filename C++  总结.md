@@ -103,6 +103,11 @@ grammar_cjkRuby: true
 
 
 
+##  `malloc/free` 与 `new/delete` 的区别
+[百度笔试题：malloc/free与new/delete的区别][17]
+
+`new/delete` 是运算符，会执行分配空间构造函数，对象消亡时，析构函数和释放空间。
+`malloc/free` 是标准库函数，只有分配空间和释放空间作用。
 
 
 
@@ -111,9 +116,9 @@ grammar_cjkRuby: true
 
 
 ##  同步异步
-[网络编程释疑之：同步，异步，阻塞，非阻塞][17]
+[网络编程释疑之：同步，异步，阻塞，非阻塞][18]
 
-[怎样理解阻塞非阻塞与同步异步的区别][18]
+[怎样理解阻塞非阻塞与同步异步的区别][19]
 
 
 阻塞，非阻塞：进程/线程访问数据是否就绪，进程/线程是否需要等待
@@ -148,5 +153,6 @@ grammar_cjkRuby: true
   [14]: http://blog.csdn.net/jiqiren007/article/details/5933599
   [15]: http://www.rudy-yuan.net/archives/137/
   [16]: http://blog.jobbole.com/59676/
-  [17]: http://yaocoder.blog.51cto.com/2668309/1308899
-  [18]: https://www.zhihu.com/question/19732473
+  [17]: http://blog.csdn.net/hackbuteer1/article/details/6789164
+  [18]: http://yaocoder.blog.51cto.com/2668309/1308899
+  [19]: https://www.zhihu.com/question/19732473
