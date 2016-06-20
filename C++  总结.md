@@ -110,15 +110,22 @@ grammar_cjkRuby: true
 `malloc/free` 是标准库函数，只有分配空间和释放空间作用。
 
 
+##  `strcpy` 函数的实现
+[`strcpy` 函数的实现][18]
 
+[`strcpy` 函数的实现][19]
+
+返回 `char*` 是为了能够支持链式表达式
+
+`dst` 和 `src` 重叠，借助 `memcpy` 函数
 
 
 
 
 ##  同步异步
-[网络编程释疑之：同步，异步，阻塞，非阻塞][18]
+[网络编程释疑之：同步，异步，阻塞，非阻塞][20]
 
-[怎样理解阻塞非阻塞与同步异步的区别][19]
+[怎样理解阻塞非阻塞与同步异步的区别][21]
 
 
 阻塞，非阻塞：进程/线程访问数据是否就绪，进程/线程是否需要等待
@@ -154,5 +161,7 @@ grammar_cjkRuby: true
   [15]: http://www.rudy-yuan.net/archives/137/
   [16]: http://blog.jobbole.com/59676/
   [17]: http://blog.csdn.net/hackbuteer1/article/details/6789164
-  [18]: http://yaocoder.blog.51cto.com/2668309/1308899
-  [19]: https://www.zhihu.com/question/19732473
+  [18]: http://www.cnblogs.com/chenyg32/p/3739564.html
+  [19]: http://blog.csdn.net/gpengtao/article/details/7464061/
+  [20]: http://yaocoder.blog.51cto.com/2668309/1308899
+  [21]: https://www.zhihu.com/question/19732473
