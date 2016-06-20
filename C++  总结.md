@@ -127,13 +127,31 @@ grammar_cjkRuby: true
 
 数组名是一个符号，不占用空间，代表一个偏移量
 
+##  编译和链接
+[C/C++编译和链接过程详解][21]
+
+[C编译器、链接器、加载器详解][22]
+
+编译：把源码 `.c 或 .cpp` 编译成二进制文件 `.o`
+
+链接(包括符合解析，重定位)：由于 `.o` 文件之间可能有相互引用(extern 关键字，函数调用)，所以有些地址需要补全
+
+
+##  一致性哈希算法
+[一致性hash算法 - consistent hashing][23]
+
+[每天进步一点点——五分钟理解一致性哈希算法(consistent hashing)][24]
+
+为了解决因特网中的热点问题，使哈希结果尽可能的分布到缓冲中去，并解决能够自由添加、删除节点
+
+平衡：通过添加虚拟节点
 
 
 
 ##  同步异步
-[网络编程释疑之：同步，异步，阻塞，非阻塞][21]
+[网络编程释疑之：同步，异步，阻塞，非阻塞][25]
 
-[怎样理解阻塞非阻塞与同步异步的区别][22]
+[怎样理解阻塞非阻塞与同步异步的区别][26]
 
 
 阻塞，非阻塞：进程/线程访问数据是否就绪，进程/线程是否需要等待
@@ -172,5 +190,9 @@ grammar_cjkRuby: true
   [18]: http://www.cnblogs.com/chenyg32/p/3739564.html
   [19]: http://blog.csdn.net/gpengtao/article/details/7464061/
   [20]: http://blog.csdn.net/yby4769250/article/details/7294696
-  [21]: http://yaocoder.blog.51cto.com/2668309/1308899
-  [22]: https://www.zhihu.com/question/19732473
+  [21]: http://blog.csdn.net/yby4769250/article/details/7360483
+  [22]: http://www.cnblogs.com/oubo/archive/2011/12/06/2394631.html
+  [23]: http://blog.csdn.net/sparkliang/article/details/5279393
+  [24]: http://blog.csdn.net/cywosp/article/details/23397179
+  [25]: http://yaocoder.blog.51cto.com/2668309/1308899
+  [26]: https://www.zhihu.com/question/19732473
