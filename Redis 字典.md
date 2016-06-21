@@ -10,7 +10,7 @@ grammar_cjkRuby: true
 
 `Redis` 的数据库就是使用字典来作为底层实现的，对数据库的增、删、查、改操作是构建在对字典的操作之上。每个哈希表里面可以有多个哈希表节点，每个节点保存了字典中的一个键值对。
 
-![字典结构](https://github.com/hadoop73/Redis-/blob/master/imge/dict.svg)
+![字典结构](https://github.com/hadoop73/Redis-/blob/master/imge/dict.png)
 
 
 ##  字典扩展
