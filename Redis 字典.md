@@ -7,16 +7,333 @@ grammar_cjkRuby: true
 [TOC]
 
 
+[redis-dict-implement.md][1]
 
-`Redis` 的数据库就是使用字典来作为底层实现的，对数据库的增、删、查、改操作是构建在对字典的操作之上。每个哈希表里面可以有多个哈希表节点，每个节点保存了字典中的一个键值对。
+[Redis字典][2]
 
-![字典结构][1]
+[【Redis基本数据结构】字典实现][3]
 
+[Redis内部数据结构详解之字典(dict)][4]
+
+`Redis` 的数据库就是使用字典来作为底层实现的，对数据库的增、删、查、改操作是构建在对字典的操作之上。
+
+![字典结构][5]
+
+**字典的实现**
+```c?linenums
+/* 
+ * 字典 
+ * 每个字典使用两个哈希表，用于实现渐进式 rehash 
+ */  
+typedef struct dict {  
+    // 特定于类型的处理函数  
+    dictType *type;  
+    // 类型处理函数的私有数据  
+    void *privdata;  
+    // 哈希表（2个）  
+    dictht ht[2];         
+    // 记录 rehash 进度的标志，值为-1 表示 rehash 未进行  
+    int rehashidx;  
+    // 当前正在运作的安全迭代器数量  
+    int iterators;        
+} dict;
+```
+`dict` 类型使用了两个指向哈希表的指针。
+* 哈希表 `ht[0]` 是字典使用的哈希表
+* 哈希表 `ht[1]` 是用来 `rehash` 的哈希表
+
+**哈希表的定义**
+```c?linenums
+/* 
+ * 哈希表 
+ */  
+typedef struct dictht {  
+    // 哈希表节点指针数组（俗称桶，bucket）  
+    dictEntry **table;        
+    // 指针数组的大小  
+    unsigned long size;       
+    // 指针数组的长度掩码，用于计算索引值  
+    unsigned long sizemask;   
+    // 哈希表现有的节点数量  
+    unsigned long used;       
+} dictht;
+```
+哈希表中 `table` 指针，用于记录所有的键值对节点
+
+**哈希表节点**
+```c?linenums
+/* 
+ * 哈希表节点 
+ */  
+typedef struct dictEntry {  
+    // 键  
+    void *key;  
+    // 值  
+    union {  
+        void *val;  
+        uint64_t u64;  
+        int64_t s64;  
+    } v;  
+    // 链往后继节点  
+    struct dictEntry *next;   
+} dictEntry;
+```
+`next` 指向下一个相同哈希值的哈希表节点。
+
+
+##  `dictType` 
+定义一组回调函数，进行数据节点的操作
+```c?linenums
+typedef struct dictType {
+    unsigned int (*hashFunction)(const void *key);  // 生成hashid
+    void *(*keyDup)(void *privdata, const void *key); //生成key
+    void *(*valDup)(void *privdata, const void *obj); //生成val
+    int (*keyCompare)(void *privdata, const void *key1, const void *key2); //key比较
+    void (*keyDestructor)(void *privdata, void *key); //销毁key
+    void (*valDestructor)(void *privdata, void *obj); //销毁val
+} dictType;
+```
+可以看出，正是这个设计将dict结构体变得异常灵活，用户可以通过自定义dictType内容实现dict的多样性。
+```cpp?linenums
+/* set集合 */
+dictType setDictType = {
+    dictEncObjHash,            /* hash function */
+    NULL,                      /* key dup */
+    NULL,                      /* val dup */
+    dictEncObjKeyCompare,      /* key compare */
+    dictRedisObjectDestructor, /* key destructor */
+    NULL                       /* val destructor */
+};
+
+/* zset集合 */
+dictType zsetDictType = {
+    dictEncObjHash,            /* hash function */
+    NULL,                      /* key dup */
+    NULL,                      /* val dup */
+    dictEncObjKeyCompare,      /* key compare */
+    dictRedisObjectDestructor, /* key destructor */
+    NULL                       /* val destructor */
+};
+
+/* 全局key存储空间 */
+dictType dbDictType = {
+    dictSdsHash,                /* hash function */
+    NULL,                       /* key dup */
+    NULL,                       /* val dup */
+    dictSdsKeyCompare,          /* key compare */
+    dictSdsDestructor,          /* key destructor */
+    dictRedisObjectDestructor   /* val destructor */
+};
+
+/* 全局过期对象存储空间 */
+dictType keyptrDictType = {
+    dictSdsHash,               /* hash function */
+    NULL,                      /* key dup */
+    NULL,                      /* val dup */
+    dictSdsKeyCompare,         /* key compare */
+    NULL,                      /* key destructor */
+    NULL                       /* val destructor */
+};
+
+/* 命令对象 */
+dictType commandTableDictType = {
+    dictSdsCaseHash,           // 命令是大小写不敏感的
+    NULL,                      /* key dup */
+    NULL,                      /* val dup */
+    dictSdsKeyCaseCompare,     // 命令是大小写不敏感的
+    dictSdsDestructor,         /* key destructor */
+    NULL                       /* val destructor */
+};
+
+/* hash结构 */
+dictType hashDictType = {
+    dictEncObjHash,             /* hash function */
+    NULL,                       /* key dup */
+    NULL,                       /* val dup */
+    dictEncObjKeyCompare,       /* key compare */
+    dictRedisObjectDestructor,  /* key destructor */
+    dictRedisObjectDestructor   /* val destructor */
+};
+
+/* val为链表的dict结构
+   主要是 expire、watch、pubsub 等功能会用到*/
+dictType keylistDictType = {
+    dictObjHash,                /* hash function */
+    NULL,                       /* key dup */
+    NULL,                       /* val dup */
+    dictObjKeyCompare,          /* key compare */
+    dictRedisObjectDestructor,  /* key destructor */
+    dictListDestructor          /* val destructor */
+};
+```
+
+
+
+
+
+
+
+
+##  创建新字典
+`dict.c` 中创建字典的方法 `dictCreate`
+* 分配空间，初始化字典(初始化type,privdata,rehashidx)
+* 初始化哈希表(初始化table,size,sizemask)
+
+```c?linenums
+/* 
+ * 创建一个新字典 
+ * T = O(1) 
+ */  
+dict *dictCreate(dictType *type,  
+        void *privDataPtr)  
+{  
+    // 分配空间  
+    dict *d = zmalloc(sizeof(*d));  
+    // 初始化字典  
+    _dictInit(d,type,privDataPtr);  
+    return d;  
+}  
+
+/* 
+ * 初始化字典 
+ * T = O(1) 
+ */  
+int _dictInit(dict *d, dictType *type,  
+        void *privDataPtr)  
+{  
+    // 初始化 ht[0]  
+    _dictReset(&d->ht[0]);  
+    // 初始化 ht[1]  
+    _dictReset(&d->ht[1]);  
+    // 初始化字典属性  
+    d->type = type;  
+    d->privdata = privDataPtr;  
+    d->rehashidx = -1;  
+    d->iterators = 0;  
+    return DICT_OK;  
+}  
+
+/* 
+ * 重置哈希表的各项属性 
+ * 
+ * T = O(1) 
+ */  
+static void _dictReset(dictht *ht)  
+{  
+    ht->table = NULL;  
+    ht->size = 0;  
+    ht->sizemask = 0;  
+    ht->used = 0;  
+}  
+dict *d = dictCreate(&hash_type, NULL);
+```
+![初始化字典][6]
+
+##  插入数据
+插入节点的时候
+* 先判断 `key` 是否存在于 `ht[0]` 或 `ht[1]`，通过 `hash` 函数计算哈希值，判断哈希值相同的链表中是否有 `key`
+* `key` 还不存在，则创建一个节点，并插入
+```c?linenums
+int dictAdd(dict *d, void *key, void *val)
+{
+    // 尝试添加键到字典，并返回包含了这个键的新哈希节点
+    // T = O(N)
+    dictEntry *entry = dictAddRaw(d,key);
+
+    // 键已存在，添加失败
+    if (!entry) return DICT_ERR;
+
+    // 键不存在，设置节点的值
+    // T = O(1)
+    dictSetVal(d, entry, val);
+
+    // 添加成功
+    return DICT_OK;
+}
+
+dictEntry *dictAddRaw(dict *d, void *key)
+{
+    int index;
+    dictEntry *entry;
+    dictht *ht;
+
+    // 如果条件允许的话，进行单步 rehash
+    // T = O(1)
+    if (dictIsRehashing(d)) _dictRehashStep(d);
+
+    /* Get the index of the new element, or -1 if
+     * the element already exists. */
+    // 计算键在哈希表中的索引值
+    // 如果值为 -1 ，那么表示键已经存在
+    // T = O(N)
+    if ((index = _dictKeyIndex(d, key)) == -1)
+        return NULL;
+
+    // T = O(1)
+    /* Allocate the memory and store the new entry */
+    // 如果字典正在 rehash ，那么将新键添加到 1 号哈希表
+    // 否则，将新键添加到 0 号哈希表
+    ht = dictIsRehashing(d) ? &d->ht[1] : &d->ht[0];
+    // 为新节点分配空间
+    entry = zmalloc(sizeof(*entry));
+    // 将新节点插入到链表表头
+    entry->next = ht->table[index];
+    ht->table[index] = entry;
+    // 更新哈希表已使用节点数量
+    ht->used++;
+
+    /* Set the hash entry fields. */
+    // 设置新节点的键
+    // T = O(1)
+    dictSetKey(d, entry, key);
+
+    return entry;
+}
+
+static int _dictKeyIndex(dict *d, const void *key)
+{
+    unsigned int h, idx, table;
+    dictEntry *he;
+
+    /* Expand the hash table if needed */
+    // 单步 rehash
+    // T = O(N)
+    if (_dictExpandIfNeeded(d) == DICT_ERR)
+        return -1;
+
+    /* Compute the key hash value */
+    // 计算 key 的哈希值
+    h = dictHashKey(d, key);
+    // T = O(1)
+    for (table = 0; table <= 1; table++) {
+
+        // 计算索引值
+        idx = h & d->ht[table].sizemask;
+
+        /* Search if this slot does not already contain the given key */
+        // 查找 key 是否存在
+        // T = O(1)
+        he = d->ht[table].table[idx];
+        while(he) {
+            if (dictCompareKeys(d, key, he->key))
+                return -1;
+            he = he->next;
+        }
+
+        // 如果运行到这里时，说明 0 号哈希表中所有节点都不包含 key
+        // 如果这时 rehahs 正在进行，那么继续对 1 号哈希表进行 rehash
+        if (!dictIsRehashing(d)) break;
+    }
+
+    // 返回索引值
+    return idx;
+}
+```
 
 ##  字典扩展
 
 首先，确定好 `size` 的大小，`size` 必须是 `2^n` 大小
-```cpp?linenums
+```c?linenums
 /*
  * 计算哈希表的真实体积
  *
@@ -214,4 +531,9 @@ int dictRehash(dict *d, int n) {
 ```
 
 
-  [1]: ./images/1466496554841.jpg "1466496554841.jpg"
+  [1]: https://github.com/hadoop73/book/blob/master/redis-dict-implement.md
+  [2]: http://www.jianshu.com/p/bc59baefadb7#
+  [3]: https://segmentfault.com/a/1190000004850844
+  [4]: http://blog.csdn.net/acceptedxukai/article/details/17484431
+  [5]: ./images/1466496554841.jpg "1466496554841.jpg"
+  [6]: ./images/1466499497552.jpg "1466499497552.jpg"
