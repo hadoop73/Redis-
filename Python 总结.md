@@ -42,7 +42,23 @@ a c b
 `UTF-8`、`GBK` 都是对 `Unicode` 的字符二进制进行了不同的编码
 
 
+##  Python 程序的运行原理
+[谈谈 Python 程序的运行原理][5]
+
+
+
+##  Python 字典对象实现
+[《Python源码剖析》阅读笔记：第五章-dict对象][6]
+
+
+字典和 C++ STL 中 map 一样，是映射容器，但是原理不一样，效率要求更高，所以采用了哈希表来实现。
+
+为了解决哈希值冲突问题，采用了**开放寻址法**。开放寻址法能更好的利用 CPU Cache，命中率较高。
+
+
   [1]: http://kodango.com/variable-arguments-in-python
   [2]: .//Passing%20arguments%20to%20Python%20functions1.pdf
   [3]: http://cenalulu.github.io/linux/character-encoding/
   [4]: http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
+  [5]: https://www.restran.net/2015/10/22/how-python-code-run/
+  [6]: http://blog.csdn.net/digimon/article/details/7875789

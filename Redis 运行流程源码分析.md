@@ -30,31 +30,10 @@ int main(int argc, char **argv) {
 
 // 检查用户是否指定了配置文件，或者配置选项
     if (argc >= 2) {
- 	// 省略...
-        // 如果第一个参数（argv[1]）不是以 "--" 开头
-        // 那么它应该是一个配置文件
-        if (argv[j][0] != '-' || argv[j][5] != '-')
-            configfile = argv[j++];
-
-        // 对用户给定的其余选项进行分析，并将分析所得的字符串追加稍后载入的配置文件的内容之后
-        // 比如 --port 6380 会被分析为 "port 6380\n"
-        while(j != argc) {
-            if (argv[j][0] == '-' && argv[j][6] == '-') {
-                /* Option name */
-                if (sdslen(options)) options = sdscat(options,"\n");
-                options = sdscat(options,argv[j]+2);
-                options = sdscat(options," ");
-            } else {
-                /* Option argument */
-                options = sdscatrepr(options,argv[j],strlen(argv[j]));
-                options = sdscat(options," ");
-            }
-            j++;
-        }
+ 	// 省略...      
         if (configfile) server.configfile = getAbsolutePath(configfile);
         // 重置保存条件
         resetServerSaveParams();
-
         // 载入配置文件， options 是前面分析出的给定选项
         loadServerConfig(configfile,options);
         sdsfree(options);
@@ -94,5 +73,3 @@ int main(int argc, char **argv) {
   [2]: http://blog.csdn.net/acceptedxukai/article/details/17842119
   [3]: http://bbs.redis.cn/forum.php?mod=viewthread&tid=55&extra=page=3
   [4]: ./images/1466670759757.jpg "1466670759757.jpg"
-  [5]: https://github.com/redisbook/book/blob/master/redis-server-start.md
-  [6]: https://github.com/redisbook/book/blob/master/redis-server-start.md
