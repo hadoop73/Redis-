@@ -97,6 +97,15 @@ connect 用于连接[enter description here][13]服务器端，需要知道客�
 
 [python 中 threading 的 setDaemon、join 的用法][15]
 
+
+##  cookie 和 session 的区别
+
+[cookie 和session 的区别详解][16]
+
+* cokkie 存放在客户端，session 存放在服务器上
+* cookie 不安全，容易被获取
+
+
 ```python?linenums
 import threading   #  导入 threading 模块
 t = threading.Thread(target,args)  # 创建一个线程对象，target 为需要运行的函数，args 为函数的参数
@@ -109,13 +118,13 @@ threada.join（) 表示正在运行的线程需要在线程 threada 结束后才
 setDaemon（) 表示主线程结束时，字线程也会被杀死
 
 ##  socketserver 源码
-[socketserver源码分析][16]
+[socketserver源码分析][17]
 
 server 类有 5 种类型，还有支持事务处理的 BaseRequestHandler 类及子类，扩展成为多线程或多进程需要继承 ForkingMixIn 或 ThreadingMixIn
 
 **Server 类**
 
-![enter description here][17]
+![enter description here][18]
 
 这些 Server 都是对 socket 的封装，并确定参数实现相关协议，在 TCP 和 UDP 中，确定 address_family、socket_type 来调用不同的协议
 
@@ -158,7 +167,6 @@ def get_request(self):
 事务处理接受 reques、client 和 server 为参数，并调用 handle（） 
 
 
-
   [1]: http://kodango.com/variable-arguments-in-python
   [2]: .//Passing%20arguments%20to%20Python%20functions1.pdf
   [3]: http://cenalulu.github.io/linux/character-encoding/
@@ -174,5 +182,6 @@ def get_request(self):
   [13]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
   [14]: http://www.cnblogs.com/fnng/p/3670789.html
   [15]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
-  [16]: http://www.blogs8.cn/posts/Wx8G9b8
-  [17]: ./images/1466930857819.jpg "1466930857819.jpg"
+  [16]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
+  [17]: http://www.blogs8.cn/posts/Wx8G9b8
+  [18]: ./images/1466930857819.jpg "1466930857819.jpg"
