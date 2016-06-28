@@ -47,8 +47,17 @@ a c b
 
 
 
+##  input()、raw_input() 和 sys.stdin
+[raw_input() 与 input() Python][6]
+
+[Python 的 sys.stdout、sys.stdin 重定向][7]
+
+raw_input() 读入的都是字符串，是对 sys.stdin.readline() 的调用
+sys.stdin.readline() 读入的为字符串，且包含换行符
+input() 能输入特定格式(比如:整数、字符串)，是对 raw_input() 的调用
+
 ##  Python 字典对象实现
-[《Python源码剖析》阅读笔记：第五章-dict对象][6]
+[《Python源码剖析》阅读笔记：第五章-dict对象][8]
 
 
 字典和 C++ STL 中 map 一样，是映射容器，但是原理不一样，效率要求更高，所以采用了哈希表来实现。
@@ -57,19 +66,19 @@ a c b
 
 
 ##  Socket 通信原理
-[Socket通信原理简介][7]
+[Socket通信原理简介][9]
 
-[ Socket通信原理和实践][8]
+[ Socket通信原理和实践][10]
 
-[SOCKET类型定义及应用][9]
+[SOCKET类型定义及应用][11]
 
 Socket 用于网络中的不同计算机通信，应用层和传输层之间的一个抽象
 
-![enter description here][10]
+![enter description here][12]
 
 **实现过程**
 
-![enter description here][11]
+![enter description here][13]
 
 **socket 函数**
 
@@ -77,7 +86,7 @@ Socket 用于网络中的不同计算机通信，应用层和传输层之间的�
 
 **bind 函数**
 
-[bind 函数说明][12]
+[bind 函数说明][14]
 
 bind 函数用于服务器端 socket 描述字和源地址、端口绑定，在多网卡的情况下也能正确的监听网卡和端口
 
@@ -85,7 +94,7 @@ bind 函数用于服务器端 socket 描述字和源地址、端口绑定，在�
 
 listen 监听 socket 描述字和客户端建立连接，同时确定申请连接队列长度，服务端不能及时处理的客户端，会放在一个队列中，队列满了，再申请的客户会收到 WSAECONNREFUSED 错误。
 
-connect 用于连接[enter description here][13]服务器端，需要知道客户端的 socket 描述字，和服务器 socket(包括服务器的端口和 IP)
+connect 用于连接[enter description here][15]服务器端，需要知道客户端的 socket 描述字，和服务器 socket(包括服务器的端口和 IP)
 
 
 **accept 函数**
@@ -93,14 +102,14 @@ connect 用于连接[enter description here][13]服务器端，需要知道客�
 
 
 ##  多线程
-[python 多线程就这么简单][14]
+[python 多线程就这么简单][16]
 
-[python 中 threading 的 setDaemon、join 的用法][15]
+[python 中 threading 的 setDaemon、join 的用法][17]
 
 
 ##  cookie 和 session 的区别
 
-[cookie 和session 的区别详解][16]
+[cookie 和session 的区别详解][18]
 
 * cokkie 存放在客户端，session 存放在服务器上
 * cookie 不安全，容易被获取
@@ -118,13 +127,13 @@ threada.join（) 表示正在运行的线程需要在线程 threada 结束后才
 setDaemon（) 表示主线程结束时，字线程也会被杀死
 
 ##  socketserver 源码
-[socketserver源码分析][17]
+[socketserver源码分析][19]
 
 server 类有 5 种类型，还有支持事务处理的 BaseRequestHandler 类及子类，扩展成为多线程或多进程需要继承 ForkingMixIn 或 ThreadingMixIn
 
 **Server 类**
 
-![enter description here][18]
+![enter description here][20]
 
 这些 Server 都是对 socket 的封装，并确定参数实现相关协议，在 TCP 和 UDP 中，确定 address_family、socket_type 来调用不同的协议
 
@@ -172,16 +181,18 @@ def get_request(self):
   [3]: http://cenalulu.github.io/linux/character-encoding/
   [4]: http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
   [5]: https://www.restran.net/2015/10/22/how-python-code-run/
-  [6]: http://blog.csdn.net/digimon/article/details/7875789
-  [7]: http://www.jianshu.com/p/90348ef3f41e
-  [8]: http://blog.csdn.net/jiajia4336/article/details/8798421
-  [9]: http://blog.163.com/alice_leee/blog/static/167106323201062332816623/
-  [10]: ./images/1466861848287.jpg "1466861848287.jpg"
-  [11]: ./images/1466861895747.jpg "1466861895747.jpg"
-  [12]: http://www.cnblogs.com/nightwatcher/archive/2011/07/03/2096717.html
-  [13]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
-  [14]: http://www.cnblogs.com/fnng/p/3670789.html
+  [6]: http://www.cnblogs.com/way_testlife/archive/2011/03/29/1999283.html
+  [7]: http://www.tuicool.com/articles/mE3QJ3
+  [8]: http://blog.csdn.net/digimon/article/details/7875789
+  [9]: http://www.jianshu.com/p/90348ef3f41e
+  [10]: http://blog.csdn.net/jiajia4336/article/details/8798421
+  [11]: http://blog.163.com/alice_leee/blog/static/167106323201062332816623/
+  [12]: ./images/1466861848287.jpg "1466861848287.jpg"
+  [13]: ./images/1466861895747.jpg "1466861895747.jpg"
+  [14]: http://www.cnblogs.com/nightwatcher/archive/2011/07/03/2096717.html
   [15]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
-  [16]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
-  [17]: http://www.blogs8.cn/posts/Wx8G9b8
-  [18]: ./images/1466930857819.jpg "1466930857819.jpg"
+  [16]: http://www.cnblogs.com/fnng/p/3670789.html
+  [17]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
+  [18]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
+  [19]: http://www.blogs8.cn/posts/Wx8G9b8
+  [20]: ./images/1466930857819.jpg "1466930857819.jpg"
