@@ -20,6 +20,8 @@ lambda arg: expression
 优点：模块化，函数式编程推崇简单原则，一个函数只做一件事情，将功能大的事情尽可能拆成小的模块;易于测试、调试;函数式编程产生更少的代码，更容易阅读和维护
 
 **闭包**
+[Python深入04 闭包][3]
+
 闭包是一类特殊的函数，如果一个函数定义在另一个函数的作用域中，并且函数中引用了外部函数的局部变量，那么这个函数就是一个闭包。
 
 * 闭包能够提高代码复用性
@@ -35,7 +37,7 @@ print line1(5), line2(5)
 ```
 
 **常用函数**
-[python函数式编程][3]
+[python函数式编程][4]
 
 * lambda，创建一个匿名函数，冒号左侧表示接收的参数，右侧表示返回值
 * map，对参数的元素调用相同的函数
@@ -56,9 +58,9 @@ sum = filter(lambda x: x>0, number)
 ```
 
 ##  可变参数
-[理解 Python 中的 *args 和 **kwargs][4]
+[理解 Python 中的 *args 和 **kwargs][5]
 
-[可变参数][5]
+[可变参数][6]
 
 
 **用在函数参数**
@@ -80,9 +82,9 @@ a c b
 
 ##  字符编码
 
-[十分钟搞清字符集和字符编码][6]
+[十分钟搞清字符集和字符编码][7]
 
-[字符编码笔记：ASCII，Unicode和UTF-8][7]
+[字符编码笔记：ASCII，Unicode和UTF-8][8]
 
 
  1. `Unicode` 对100多万个字符进行了编码，只规定了符号的二进制代码，没有规定二进制代码如何存储
@@ -93,21 +95,21 @@ a c b
 
 
 ##  Python 程序的运行原理
-[谈谈 Python 程序的运行原理][8]
+[谈谈 Python 程序的运行原理][9]
 
 
 
 ##  input()、raw_input() 和 sys.stdin
-[raw_input() 与 input() Python][9]
+[raw_input() 与 input() Python][10]
 
-[Python 的 sys.stdout、sys.stdin 重定向][10]
+[Python 的 sys.stdout、sys.stdin 重定向][11]
 
 raw_input() 读入的都是字符串，是对 sys.stdin.readline() 的调用
 sys.stdin.readline() 读入的为字符串，且包含换行符
 input() 能输入特定格式(比如:整数、字符串)，是对 raw_input() 的调用
 
 ##  Python 字典对象实现
-[《Python源码剖析》阅读笔记：第五章-dict对象][11]
+[《Python源码剖析》阅读笔记：第五章-dict对象][12]
 
 
 字典和 C++ STL 中 map 一样，是映射容器，但是原理不一样，效率要求更高，所以采用了哈希表来实现。
@@ -116,19 +118,19 @@ input() 能输入特定格式(比如:整数、字符串)，是对 raw_input() �
 
 
 ##  Socket 通信原理
-[Socket通信原理简介][12]
+[Socket通信原理简介][13]
 
-[ Socket通信原理和实践][13]
+[ Socket通信原理和实践][14]
 
-[SOCKET类型定义及应用][14]
+[SOCKET类型定义及应用][15]
 
 Socket 用于网络中的不同计算机通信，应用层和传输层之间的一个抽象
 
-![enter description here][15]
+![enter description here][16]
 
 **实现过程**
 
-![enter description here][16]
+![enter description here][17]
 
 **socket 函数**
 
@@ -136,7 +138,7 @@ Socket 用于网络中的不同计算机通信，应用层和传输层之间的�
 
 **bind 函数**
 
-[bind 函数说明][17]
+[bind 函数说明][18]
 
 bind 函数用于服务器端 socket 描述字和源地址、端口绑定，在多网卡的情况下也能正确的监听网卡和端口
 
@@ -144,7 +146,7 @@ bind 函数用于服务器端 socket 描述字和源地址、端口绑定，在�
 
 listen 监听 socket 描述字和客户端建立连接，同时确定申请连接队列长度，服务端不能及时处理的客户端，会放在一个队列中，队列满了，再申请的客户会收到 WSAECONNREFUSED 错误。
 
-connect 用于连接[enter description here][18]服务器端，需要知道客户端的 socket 描述字，和服务器 socket(包括服务器的端口和 IP)
+connect 用于连接[enter description here][19]服务器端，需要知道客户端的 socket 描述字，和服务器 socket(包括服务器的端口和 IP)
 
 
 **accept 函数**
@@ -152,14 +154,14 @@ connect 用于连接[enter description here][18]服务器端，需要知道客�
 
 
 ##  多线程
-[python 多线程就这么简单][19]
+[python 多线程就这么简单][20]
 
-[python 中 threading 的 setDaemon、join 的用法][20]
+[python 中 threading 的 setDaemon、join 的用法][21]
 
 
 ##  cookie 和 session 的区别
 
-[cookie 和session 的区别详解][21]
+[cookie 和session 的区别详解][22]
 
 * cokkie 存放在客户端，session 存放在服务器上
 * cookie 不安全，容易被获取
@@ -177,13 +179,13 @@ threada.join（) 表示正在运行的线程需要在线程 threada 结束后才
 setDaemon（) 表示主线程结束时，字线程也会被杀死
 
 ##  socketserver 源码
-[socketserver源码分析][22]
+[socketserver源码分析][23]
 
 server 类有 5 种类型，还有支持事务处理的 BaseRequestHandler 类及子类，扩展成为多线程或多进程需要继承 ForkingMixIn 或 ThreadingMixIn
 
 **Server 类**
 
-![enter description here][23]
+![enter description here][24]
 
 这些 Server 都是对 socket 的封装，并确定参数实现相关协议，在 TCP 和 UDP 中，确定 address_family、socket_type 来调用不同的协议
 
@@ -228,24 +230,25 @@ def get_request(self):
 
   [1]: http://www.cnblogs.com/huxi/archive/2011/06/18/2084316.html
   [2]: http://www.cnblogs.com/huxi/archive/2011/06/24/2089358.html
-  [3]: http://www.cnblogs.com/fnng/p/3699893.html
-  [4]: http://kodango.com/variable-arguments-in-python
-  [5]: .//Passing%20arguments%20to%20Python%20functions1.pdf
-  [6]: http://cenalulu.github.io/linux/character-encoding/
-  [7]: http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
-  [8]: https://www.restran.net/2015/10/22/how-python-code-run/
-  [9]: http://www.cnblogs.com/way_testlife/archive/2011/03/29/1999283.html
-  [10]: http://www.tuicool.com/articles/mE3QJ3
-  [11]: http://blog.csdn.net/digimon/article/details/7875789
-  [12]: http://www.jianshu.com/p/90348ef3f41e
-  [13]: http://blog.csdn.net/jiajia4336/article/details/8798421
-  [14]: http://blog.163.com/alice_leee/blog/static/167106323201062332816623/
-  [15]: ./images/1466861848287.jpg "1466861848287.jpg"
-  [16]: ./images/1466861895747.jpg "1466861895747.jpg"
-  [17]: http://www.cnblogs.com/nightwatcher/archive/2011/07/03/2096717.html
-  [18]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
-  [19]: http://www.cnblogs.com/fnng/p/3670789.html
-  [20]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
-  [21]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
-  [22]: http://www.blogs8.cn/posts/Wx8G9b8
-  [23]: ./images/1466930857819.jpg "1466930857819.jpg"
+  [3]: http://www.cnblogs.com/vamei/archive/2012/12/15/2772451.html
+  [4]: http://www.cnblogs.com/fnng/p/3699893.html
+  [5]: http://kodango.com/variable-arguments-in-python
+  [6]: .//Passing%20arguments%20to%20Python%20functions1.pdf
+  [7]: http://cenalulu.github.io/linux/character-encoding/
+  [8]: http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
+  [9]: https://www.restran.net/2015/10/22/how-python-code-run/
+  [10]: http://www.cnblogs.com/way_testlife/archive/2011/03/29/1999283.html
+  [11]: http://www.tuicool.com/articles/mE3QJ3
+  [12]: http://blog.csdn.net/digimon/article/details/7875789
+  [13]: http://www.jianshu.com/p/90348ef3f41e
+  [14]: http://blog.csdn.net/jiajia4336/article/details/8798421
+  [15]: http://blog.163.com/alice_leee/blog/static/167106323201062332816623/
+  [16]: ./images/1466861848287.jpg "1466861848287.jpg"
+  [17]: ./images/1466861895747.jpg "1466861895747.jpg"
+  [18]: http://www.cnblogs.com/nightwatcher/archive/2011/07/03/2096717.html
+  [19]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
+  [20]: http://www.cnblogs.com/fnng/p/3670789.html
+  [21]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
+  [22]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
+  [23]: http://www.blogs8.cn/posts/Wx8G9b8
+  [24]: ./images/1466930857819.jpg "1466930857819.jpg"
