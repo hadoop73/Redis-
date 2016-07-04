@@ -29,11 +29,26 @@ typedef char *  va_list;
 ```
 
 
+##  声明与定义
+[声明和定义 (C++)][3]
+
+[ 变量定义和声明的区别（整理）][4]
+
+[C++中声明和定义的区别][5]
+
+声明：引入名称，接下来的代码才能用，包括变量和函数
+	* 函数
+	* 包含 extern 说明符，但是没有初始化
+	* 类中的数据成员
+	* 类名声明，如 class T
+	* typedef 语句
+定义：编译器会分配内存空间
+
 
 ##  多态性
-[多种多态性][3]
+[多种多态性][6]
 
-[浅谈 C++ 多态性][4]
+[浅谈 C++ 多态性][7]
 
 多态性即 **“一个接口，多种方法”**，程序运行时才决定调用的函数。
 1、静态多态性：指定义在一个类或函数中的同名函数，根据参数表区别语义，通过静态联编实现。
@@ -49,7 +64,7 @@ typedef char *  va_list;
 
 
 ##  动态绑定和静态绑定
-[深入理解 C++ 的动态绑定和静态绑定][5]
+[深入理解 C++ 的动态绑定和静态绑定][8]
 
 **对象的静态类型：** 对象在声明时采用的类型，是在编译期确定的。
 **对象的动态类型：** 目前所指对象类型。在运行期决定，动态类型可以改变，静态类型无法改变。
@@ -65,35 +80,35 @@ typedef char *  va_list;
 
 
 ##  对象模型
-[《深度探索C++对象模型》笔记汇总][6]
+[《深度探索C++对象模型》笔记汇总][9]
 
-[C++对象模型][7]
+[C++对象模型][10]
 
 `C++` 类包含两种数据成员：**静态数据成员** 和 **非静态数据成员**，三种成员函数：**成员函数**、**静态函数** 和 **虚函数**，共有三种对象模型：**简单对象模型**、**表格驱动对象模型** 和 **`C++` 对象模型**。
 
 
 ##  内存对齐的原则
-[内存对齐的规则以及作用][8]
+[内存对齐的规则以及作用][11]
 
-[内存对齐全攻略--涉及位域的内存对齐原则][9]
+[内存对齐全攻略--涉及位域的内存对齐原则][12]
 
 
 ##  C++ 模板
-[C++模板][10]
+[C++模板][13]
 
-[C++模板学习][11]
+[C++模板学习][14]
 
 
 ##  `I/O` 多路复用 `select、poll、epoll` 的区别
-[I/O多路复用select、poll、epoll的区别使用][12]
+[I/O多路复用select、poll、epoll的区别使用][15]
 
-[`Redis I/O` 多路复用 ][13]
+[`Redis I/O` 多路复用 ][16]
 
 `I/O` 多路复用技术为了解决进程或线程阻塞到某个 `I/O` 系统调用而出现的技术，使进程不阻塞于某个特定 `I/O` 系统调用。
 
 
 ##  内联函数
-[内联函数][14]
+[内联函数][17]
 
 内联函数是指定义在类体内的成员函数
 * 函数代码被放入符号表中，使用时直接进行替换，没有调用的开销，效率高
@@ -107,35 +122,35 @@ typedef char *  va_list;
 可以使用 `inline` 来定义内联函数。
 
 ##  函数调用
-[ 深入理解C语言的函数调用过程 ][15]
+[ 深入理解C语言的函数调用过程 ][18]
 
 调用之前保存栈空间，里面是局部变量，还有保存下一个要执行的地址，再传递函数参数
 
 ## `extern C` 作用
-[`extern C` 作用详解][16]
+[`extern C` 作用详解][19]
 
 主要为了能够正确实现 `C++` 调用 C 语言代码，指示编译器这部分代码按照 C 语言进行编译。
 在 C++ 出现之前，很多代码都是 C 语言写的，为了更好的支持原来的 C 代码和已经写好的C语言库，在 C++ 中尽可能支持 C。
 
 
 ##  `Reactor` 模式
-[使用I/O多路复用技术--select实现Reactor模式][17]
+[使用I/O多路复用技术--select实现Reactor模式][20]
 
-[两种高性能I/O设计模式(Reactor/Proactor)的比较][18]
+[两种高性能I/O设计模式(Reactor/Proactor)的比较][21]
 
 
 
 ##  `malloc/free` 与 `new/delete` 的区别
-[百度笔试题：malloc/free与new/delete的区别][19]
+[百度笔试题：malloc/free与new/delete的区别][22]
 
 `new/delete` 是运算符，会执行分配空间构造函数，对象消亡时，析构函数和释放空间。
 `malloc/free` 是标准库函数，只有分配空间和释放空间作用。
 
 
 ##  `strcpy` 函数的实现
-[`strcpy` 函数的实现][20]
+[`strcpy` 函数的实现][23]
 
-[`strcpy` 函数的实现][21]
+[`strcpy` 函数的实现][24]
 
 返回 `char*` 是为了能够支持链式表达式
 
@@ -143,16 +158,16 @@ typedef char *  va_list;
 
 
 ##  柔性数组
-[C/C++ 中的0长数组（柔性数组）][22]
+[C/C++ 中的0长数组（柔性数组）][25]
 
 结构体中的 0 长度数组，能够构造变长度的结构体
 
 数组名是一个符号，不占用空间，代表一个偏移量
 
 ##  编译和链接
-[C/C++编译和链接过程详解][23]
+[C/C++编译和链接过程详解][26]
 
-[C编译器、链接器、加载器详解][24]
+[C编译器、链接器、加载器详解][27]
 
 编译：把源码 `.c 或 .cpp` 编译成二进制文件 `.o`
 
@@ -160,9 +175,9 @@ typedef char *  va_list;
 
 
 ##  一致性哈希算法
-[一致性hash算法 - consistent hashing][25]
+[一致性hash算法 - consistent hashing][28]
 
-[每天进步一点点——五分钟理解一致性哈希算法(consistent hashing)][26]
+[每天进步一点点——五分钟理解一致性哈希算法(consistent hashing)][29]
 
 为了解决因特网中的热点问题，使哈希结果尽可能的分布到缓冲中去，并解决能够自由添加、删除节点
 
@@ -171,9 +186,9 @@ typedef char *  va_list;
 
 
 ##  同步异步
-[网络编程释疑之：同步，异步，阻塞，非阻塞][27]
+[网络编程释疑之：同步，异步，阻塞，非阻塞][30]
 
-[怎样理解阻塞非阻塞与同步异步的区别][28]
+[怎样理解阻塞非阻塞与同步异步的区别][31]
 
 
 阻塞，非阻塞：进程/线程访问数据是否就绪，进程/线程是否需要等待
@@ -182,7 +197,7 @@ typedef char *  va_list;
 异步：调用在发出后，调用直接返回，所以没有返回结果；而是有被调用者通过状态、通知来通知调用者，或者通过回调函数处理这个调用。
 
 ##  接口和抽象类的区别
-[面试题：接口和抽象类的区别][29]
+[面试题：接口和抽象类的区别][32]
 
 抽象类是一类事务的高度聚合，对于继承抽象类的子类来说，属于"是"的关系；接口是定义行为规范，对于实现接口的子类来说，是"行为需要按照接口来完成"
 
@@ -193,7 +208,7 @@ typedef char *  va_list;
 抽象类新增方法，继承类可以不用任何处理；对于接口来说，需要修改继承类，添加新方法的实现
 
 ##  单列模式
-[深入浅出单实例Singleton设计模式][30]
+[深入浅出单实例Singleton设计模式][33]
 
 
 
@@ -248,7 +263,7 @@ void Func(char a[100])
 
 ##  多线程
 
-[多线程][31]
+[多线程][34]
 
 在 Linux 中，创建进程的代价小，适合多进程
 在 Windows 中，创建和销毁进程的代价要高，适合多线程
@@ -262,32 +277,35 @@ void Func(char a[100])
 
   [1]: http://www.cnblogs.com/fangyukuan/archive/2010/09/18/1829871.html
   [2]: http://blog.csdn.net/hackbuteer1/article/details/7558979#comments
-  [3]: http://blog.csdn.net/fengyunjh/article/details/6188769
-  [4]: http://blog.csdn.net/hackbuteer1/article/details/7475622
-  [5]: http://blog.csdn.net/chgaowei/article/details/6427731
-  [6]: http://www.roading.org/develop/cpp/%E3%80%8A%E6%B7%B1%E5%BA%A6%E6%8E%A2%E7%B4%A2c%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B%E3%80%8B%E7%AC%94%E8%AE%B0%E6%B1%87%E6%80%BB.html
-  [7]: http://www.cnblogs.com/skynet/p/3343726.html
-  [8]: http://www.cppblog.com/snailcong/archive/2009/03/16/76705.html
-  [9]: http://www.cnblogs.com/shitouer/archive/2010/04/07/1706785.html
-  [10]: http://www.cnblogs.com/gw811/archive/2012/10/25/2738929.html
-  [11]: http://www.cnblogs.com/gaojun/archive/2010/09/10/1823354.html
-  [12]: http://www.bkjia.com/ASPjc/1000957.html#top
-  [13]: https://www.zhihu.com/question/28594409
-  [14]: http://www.cnblogs.com/singa/archive/2008/09/24/1297821.html
-  [15]: http://blog.chinaunix.net/uid-23069658-id-3981406.html
-  [16]: http://blog.csdn.net/jiqiren007/article/details/5933599
-  [17]: http://www.rudy-yuan.net/archives/137/
-  [18]: http://blog.jobbole.com/59676/
-  [19]: http://blog.csdn.net/hackbuteer1/article/details/6789164
-  [20]: http://www.cnblogs.com/chenyg32/p/3739564.html
-  [21]: http://blog.csdn.net/gpengtao/article/details/7464061/
-  [22]: http://blog.csdn.net/yby4769250/article/details/7294696
-  [23]: http://blog.csdn.net/yby4769250/article/details/7360483
-  [24]: http://www.cnblogs.com/oubo/archive/2011/12/06/2394631.html
-  [25]: http://blog.csdn.net/sparkliang/article/details/5279393
-  [26]: http://blog.csdn.net/cywosp/article/details/23397179
-  [27]: http://yaocoder.blog.51cto.com/2668309/1308899
-  [28]: https://www.zhihu.com/question/19732473
-  [29]: http://www.cnblogs.com/roky/archive/2008/02/21/1076332.html
-  [30]: http://blog.csdn.net/haoel/article/details/4028232
-  [31]: https://www.zhihu.com/question/19901763
+  [3]: https://msdn.microsoft.com/zh-cn/library/0e5kx78b.aspx
+  [4]: http://blog.csdn.net/feitianxuxue/article/details/7204116
+  [5]: http://www.cnblogs.com/frankfang/archive/2011/05/02/2034393.html
+  [6]: http://blog.csdn.net/fengyunjh/article/details/6188769
+  [7]: http://blog.csdn.net/hackbuteer1/article/details/7475622
+  [8]: http://blog.csdn.net/chgaowei/article/details/6427731
+  [9]: http://www.roading.org/develop/cpp/%E3%80%8A%E6%B7%B1%E5%BA%A6%E6%8E%A2%E7%B4%A2c%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B%E3%80%8B%E7%AC%94%E8%AE%B0%E6%B1%87%E6%80%BB.html
+  [10]: http://www.cnblogs.com/skynet/p/3343726.html
+  [11]: http://www.cppblog.com/snailcong/archive/2009/03/16/76705.html
+  [12]: http://www.cnblogs.com/shitouer/archive/2010/04/07/1706785.html
+  [13]: http://www.cnblogs.com/gw811/archive/2012/10/25/2738929.html
+  [14]: http://www.cnblogs.com/gaojun/archive/2010/09/10/1823354.html
+  [15]: http://www.bkjia.com/ASPjc/1000957.html#top
+  [16]: https://www.zhihu.com/question/28594409
+  [17]: http://www.cnblogs.com/singa/archive/2008/09/24/1297821.html
+  [18]: http://blog.chinaunix.net/uid-23069658-id-3981406.html
+  [19]: http://blog.csdn.net/jiqiren007/article/details/5933599
+  [20]: http://www.rudy-yuan.net/archives/137/
+  [21]: http://blog.jobbole.com/59676/
+  [22]: http://blog.csdn.net/hackbuteer1/article/details/6789164
+  [23]: http://www.cnblogs.com/chenyg32/p/3739564.html
+  [24]: http://blog.csdn.net/gpengtao/article/details/7464061/
+  [25]: http://blog.csdn.net/yby4769250/article/details/7294696
+  [26]: http://blog.csdn.net/yby4769250/article/details/7360483
+  [27]: http://www.cnblogs.com/oubo/archive/2011/12/06/2394631.html
+  [28]: http://blog.csdn.net/sparkliang/article/details/5279393
+  [29]: http://blog.csdn.net/cywosp/article/details/23397179
+  [30]: http://yaocoder.blog.51cto.com/2668309/1308899
+  [31]: https://www.zhihu.com/question/19732473
+  [32]: http://www.cnblogs.com/roky/archive/2008/02/21/1076332.html
+  [33]: http://blog.csdn.net/haoel/article/details/4028232
+  [34]: https://www.zhihu.com/question/19901763
