@@ -220,16 +220,50 @@ connect 用于连接[enter description here][21]服务器端，需要知道客�
 **accept 函数**
 通过监听 socket 描述字产生已连接 socket 描述字，已连接 socket 用于通信
 
+##  yield 
+[Python yield 使用浅析][22]
+
+带有 yield 的函数是一个 generator，每次执行到一个 yield 语句就会中断，并返回一个迭代值，下次执行从 yield 的下一个语句继续执行
+
+```python
+def fab(max): 
+    n, a, b = 0, 0, 1 
+    while n < max: 
+        yield b 
+        # print b 
+        a, b = b, a + b 
+        n = n + 1 
+
+ >>> for n in fab(5): 
+ ...     print n 
+ ... 
+ 1 
+ 1 
+ 2 
+ 3 
+ 5
+ >>> f = fab(5) 
+ >>> f.next() 
+ 1 
+ >>> f.next() 
+ 1 
+ >>> f.next() 
+ 2 
+ >>> f.next() 
+ 3 
+ >>> f.next() 
+ 5 
+```
 
 ##  多线程
-[python 多线程就这么简单][22]
+[python 多线程就这么简单][23]
 
-[python 中 threading 的 setDaemon、join 的用法][23]
+[python 中 threading 的 setDaemon、join 的用法][24]
 
 
 ##  cookie 和 session 的区别
 
-[cookie 和session 的区别详解][24]
+[cookie 和session 的区别详解][25]
 
 * cokkie 存放在客户端，session 存放在服务器上
 * cookie 不安全，容易被获取
@@ -247,13 +281,13 @@ threada.join（) 表示正在运行的线程需要在线程 threada 结束后才
 setDaemon（) 表示主线程结束时，字线程也会被杀死
 
 ##  socketserver 源码
-[socketserver源码分析][25]
+[socketserver源码分析][26]
 
 server 类有 5 种类型，还有支持事务处理的 BaseRequestHandler 类及子类，扩展成为多线程或多进程需要继承 ForkingMixIn 或 ThreadingMixIn
 
 **Server 类**
 
-![enter description here][26]
+![enter description here][27]
 
 这些 Server 都是对 socket 的封装，并确定参数实现相关协议，在 TCP 和 UDP 中，确定 address_family、socket_type 来调用不同的协议
 
@@ -296,6 +330,29 @@ def get_request(self):
 事务处理接受 reques、client 和 server 为参数，并调用 handle（） 
 
 
+##  Web.py
+
+
+
+**WSGI 流程**
+[理解Python WSGI][28]
+
+[WSGI简介][29]
+
+![webpy 流程图][30]
+
+WSGI 是一个规范，描述了 web server 如何与 web application 交互、web application 如何处理请求
+
+**server 如何调用 application**
+WSGI 规定了 server 端交互的一个对象，所有请求 server 都会把这个 application 作为唯一的入口，传递请求；最后的请求又用户编写的处理程序完成。
+
+传递的过程中，需要服务器的当前上下文，和专有的 start_response 对象
+
+***start_response 参数***
+* status:一个字符串，表示 HTTP 响应状态字符串
+* response_headers:一个列表，包含如下形式的元组：(head_name,head_value)，用来表示 HTTP 响应的 headers
+
+
   [1]: http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819879946007bbf6ad052463ab18034f0254bf355000
   [2]: http://blog.csdn.net/xyw_blog/article/details/18401237
   [3]: http://www.cnblogs.com/huxi/archive/2011/06/18/2084316.html
@@ -317,8 +374,12 @@ def get_request(self):
   [19]: ./images/1466861895747.jpg "1466861895747.jpg"
   [20]: http://www.cnblogs.com/nightwatcher/archive/2011/07/03/2096717.html
   [21]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
-  [22]: http://www.cnblogs.com/fnng/p/3670789.html
-  [23]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
-  [24]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
-  [25]: http://www.blogs8.cn/posts/Wx8G9b8
-  [26]: ./images/1466930857819.jpg "1466930857819.jpg"
+  [22]: http://www.ibm.com/developerworks/cn/opensource/os-cn-python-yield/
+  [23]: http://www.cnblogs.com/fnng/p/3670789.html
+  [24]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
+  [25]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
+  [26]: http://www.blogs8.cn/posts/Wx8G9b8
+  [27]: ./images/1466930857819.jpg "1466930857819.jpg"
+  [28]: http://www.letiantian.me/2015-09-10-understand-python-wsgi/
+  [29]: https://segmentfault.com/a/1190000003069785
+  [30]: ./images/1467896540337.jpg "1467896540337.jpg"
