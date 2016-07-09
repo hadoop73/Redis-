@@ -332,14 +332,16 @@ def get_request(self):
 
 ##  Web.py
 
-
-
 **WSGI 流程**
-[理解Python WSGI][28]
+[WSGI初探][28]
 
-[WSGI简介][29]
+[WSGI 简介][29]
 
-![webpy 流程图][30]
+[理解Python WSGI][30]
+
+[WSGI 简介][31]
+
+![webpy 流程图][32]
 
 WSGI 是一个规范，描述了 web server 如何与 web application 交互、web application 如何处理请求
 
@@ -380,6 +382,8 @@ WSGI 规定了 server 端交互的一个对象，所有请求 server 都会把�
   [25]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
   [26]: http://www.blogs8.cn/posts/Wx8G9b8
   [27]: ./images/1466930857819.jpg "1466930857819.jpg"
-  [28]: http://www.letiantian.me/2015-09-10-understand-python-wsgi/
-  [29]: https://segmentfault.com/a/1190000003069785
-  [30]: ./images/1467896540337.jpg "1467896540337.jpg"
+  [28]: http://linluxiang.iteye.com/blog/799163
+  [29]: http://blog.csdn.net/on_1y/article/details/18803563
+  [30]: http://www.letiantian.me/2015-09-10-understand-python-wsgi/
+  [31]: https://segmentfault.com/a/1190000003069785
+  [32]: ./images/1467896540337.jpg "1467896540337.jpg"
