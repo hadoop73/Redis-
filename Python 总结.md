@@ -162,22 +162,44 @@ a c b
 `UTF-8`、`GBK` 都是对 `Unicode` 的字符二进制进行了不同的编码
 
 
+##  深拷贝和浅拷贝
+[深入Python(4):深拷贝和浅拷贝][11]
+
+在没有调用 copy 模块的 deepcopy()时，都是浅拷贝，只是增加源对象的引用计数
+以下会增加引用计数
+```python
+y = x   #做别名
+foo(x)  #做参数传递
+mylis = [1,2,x,'a'] #成为容器对象的一个元素
+```
+以下会减少引用计数
+```python
+del x   #del显式销毁
+
+bar = x 
+x = True    #对象的一个别名被赋值给其他对象
+
+mylis.remove(x) #对象被从窗口对象中移除
+
+del mylis   #窗口对象本身被销毁
+```
+
 ##  Python 程序的运行原理
-[谈谈 Python 程序的运行原理][11]
+[谈谈 Python 程序的运行原理][12]
 
 
 
 ##  input()、raw_input() 和 sys.stdin
-[raw_input() 与 input() Python][12]
+[raw_input() 与 input() Python][13]
 
-[Python 的 sys.stdout、sys.stdin 重定向][13]
+[Python 的 sys.stdout、sys.stdin 重定向][14]
 
 raw_input() 读入的都是字符串，是对 sys.stdin.readline() 的调用
 sys.stdin.readline() 读入的为字符串，且包含换行符
 input() 能输入特定格式(比如:整数、字符串)，是对 raw_input() 的调用
 
 ##  Python 字典对象实现
-[《Python源码剖析》阅读笔记：第五章-dict对象][14]
+[《Python源码剖析》阅读笔记：第五章-dict对象][15]
 
 
 字典和 C++ STL 中 map 一样，是映射容器，但是原理不一样，效率要求更高，所以采用了哈希表来实现。
@@ -186,19 +208,19 @@ input() 能输入特定格式(比如:整数、字符串)，是对 raw_input() �
 
 
 ##  Socket 通信原理
-[Socket通信原理简介][15]
+[Socket通信原理简介][16]
 
-[ Socket通信原理和实践][16]
+[ Socket通信原理和实践][17]
 
-[SOCKET类型定义及应用][17]
+[SOCKET类型定义及应用][18]
 
 Socket 用于网络中的不同计算机通信，应用层和传输层之间的一个抽象
 
-![enter description here][18]
+![enter description here][19]
 
 **实现过程**
 
-![enter description here][19]
+![enter description here][20]
 
 **socket 函数**
 
@@ -206,7 +228,7 @@ Socket 用于网络中的不同计算机通信，应用层和传输层之间的�
 
 **bind 函数**
 
-[bind 函数说明][20]
+[bind 函数说明][21]
 
 bind 函数用于服务器端 socket 描述字和源地址、端口绑定，在多网卡的情况下也能正确的监听网卡和端口
 
@@ -214,14 +236,14 @@ bind 函数用于服务器端 socket 描述字和源地址、端口绑定，在�
 
 listen 监听 socket 描述字和客户端建立连接，同时确定申请连接队列长度，服务端不能及时处理的客户端，会放在一个队列中，队列满了，再申请的客户会收到 WSAECONNREFUSED 错误。
 
-connect 用于连接[enter description here][21]服务器端，需要知道客户端的 socket 描述字，和服务器 socket(包括服务器的端口和 IP)
+connect 用于连接[enter description here][22]服务器端，需要知道客户端的 socket 描述字，和服务器 socket(包括服务器的端口和 IP)
 
 
 **accept 函数**
 通过监听 socket 描述字产生已连接 socket 描述字，已连接 socket 用于通信
 
 ##  yield 
-[Python yield 使用浅析][22]
+[Python yield 使用浅析][23]
 
 带有 yield 的函数是一个 generator，每次执行到一个 yield 语句就会中断，并返回一个迭代值，下次执行从 yield 的下一个语句继续执行
 
@@ -256,14 +278,14 @@ def fab(max):
 ```
 
 ##  多线程
-[python 多线程就这么简单][23]
+[python 多线程就这么简单][24]
 
-[python 中 threading 的 setDaemon、join 的用法][24]
+[python 中 threading 的 setDaemon、join 的用法][25]
 
 
 ##  cookie 和 session 的区别
 
-[cookie 和session 的区别详解][25]
+[cookie 和session 的区别详解][26]
 
 * cokkie 存放在客户端，session 存放在服务器上
 * cookie 不安全，容易被获取
@@ -281,13 +303,13 @@ threada.join（) 表示正在运行的线程需要在线程 threada 结束后才
 setDaemon（) 表示主线程结束时，字线程也会被杀死
 
 ##  socketserver 源码
-[socketserver源码分析][26]
+[socketserver源码分析][27]
 
 server 类有 5 种类型，还有支持事务处理的 BaseRequestHandler 类及子类，扩展成为多线程或多进程需要继承 ForkingMixIn 或 ThreadingMixIn
 
 **Server 类**
 
-![enter description here][27]
+![enter description here][28]
 
 这些 Server 都是对 socket 的封装，并确定参数实现相关协议，在 TCP 和 UDP 中，确定 address_family、socket_type 来调用不同的协议
 
@@ -332,16 +354,18 @@ def get_request(self):
 
 ##  Web.py
 
+[【Python】Webpy 源码学习（一）][29]
+
 **WSGI 流程**
-[WSGI初探][28]
-
-[WSGI 简介][29]
-
-[理解Python WSGI][30]
+[WSGI初探][30]
 
 [WSGI 简介][31]
 
-![webpy 流程图][32]
+[理解Python WSGI][32]
+
+[WSGI 简介][33]
+
+![webpy 流程图][34]
 
 WSGI 是一个规范，描述了 web server 如何与 web application 交互、web application 如何处理请求
 
@@ -365,25 +389,27 @@ WSGI 规定了 server 端交互的一个对象，所有请求 server 都会把�
   [8]: .//Passing%20arguments%20to%20Python%20functions1.pdf
   [9]: http://cenalulu.github.io/linux/character-encoding/
   [10]: http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
-  [11]: https://www.restran.net/2015/10/22/how-python-code-run/
-  [12]: http://www.cnblogs.com/way_testlife/archive/2011/03/29/1999283.html
-  [13]: http://www.tuicool.com/articles/mE3QJ3
-  [14]: http://blog.csdn.net/digimon/article/details/7875789
-  [15]: http://www.jianshu.com/p/90348ef3f41e
-  [16]: http://blog.csdn.net/jiajia4336/article/details/8798421
-  [17]: http://blog.163.com/alice_leee/blog/static/167106323201062332816623/
-  [18]: ./images/1466861848287.jpg "1466861848287.jpg"
-  [19]: ./images/1466861895747.jpg "1466861895747.jpg"
-  [20]: http://www.cnblogs.com/nightwatcher/archive/2011/07/03/2096717.html
-  [21]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
-  [22]: http://www.ibm.com/developerworks/cn/opensource/os-cn-python-yield/
-  [23]: http://www.cnblogs.com/fnng/p/3670789.html
-  [24]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
-  [25]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
-  [26]: http://www.blogs8.cn/posts/Wx8G9b8
-  [27]: ./images/1466930857819.jpg "1466930857819.jpg"
-  [28]: http://linluxiang.iteye.com/blog/799163
-  [29]: http://blog.csdn.net/on_1y/article/details/18803563
-  [30]: http://www.letiantian.me/2015-09-10-understand-python-wsgi/
-  [31]: https://segmentfault.com/a/1190000003069785
-  [32]: ./images/1467896540337.jpg "1467896540337.jpg"
+  [11]: http://www.cnblogs.com/BeginMan/p/3197649.html
+  [12]: https://www.restran.net/2015/10/22/how-python-code-run/
+  [13]: http://www.cnblogs.com/way_testlife/archive/2011/03/29/1999283.html
+  [14]: http://www.tuicool.com/articles/mE3QJ3
+  [15]: http://blog.csdn.net/digimon/article/details/7875789
+  [16]: http://www.jianshu.com/p/90348ef3f41e
+  [17]: http://blog.csdn.net/jiajia4336/article/details/8798421
+  [18]: http://blog.163.com/alice_leee/blog/static/167106323201062332816623/
+  [19]: ./images/1466861848287.jpg "1466861848287.jpg"
+  [20]: ./images/1466861895747.jpg "1466861895747.jpg"
+  [21]: http://www.cnblogs.com/nightwatcher/archive/2011/07/03/2096717.html
+  [22]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
+  [23]: http://www.ibm.com/developerworks/cn/opensource/os-cn-python-yield/
+  [24]: http://www.cnblogs.com/fnng/p/3670789.html
+  [25]: http://blog.sina.com.cn/s/blog_9f488855010198vn.html
+  [26]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
+  [27]: http://www.blogs8.cn/posts/Wx8G9b8
+  [28]: ./images/1466930857819.jpg "1466930857819.jpg"
+  [29]: http://diaocow.iteye.com/blog/1922760
+  [30]: http://linluxiang.iteye.com/blog/799163
+  [31]: http://blog.csdn.net/on_1y/article/details/18803563
+  [32]: http://www.letiantian.me/2015-09-10-understand-python-wsgi/
+  [33]: https://segmentfault.com/a/1190000003069785
+  [34]: ./images/1467896540337.jpg "1467896540337.jpg"
