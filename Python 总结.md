@@ -232,11 +232,12 @@ Socket 用于网络中的不同计算机通信，应用层和传输层之间的�
 
 bind 函数用于服务器端 socket 描述字和源地址、端口绑定，在多网卡的情况下也能正确的监听网卡和端口
 
-**listen\connect 函数**
+**listen/connect 函数**
 
 listen 监听 socket 描述字和客户端建立连接，同时确定申请连接队列长度，服务端不能及时处理的客户端，会放在一个队列中，队列满了，再申请的客户会收到 WSAECONNREFUSED 错误。
 
-connect 用于连接[enter description here][22]服务器端，需要知道客户端的 socket 描述字，和服务器 socket(包括服务器的端口和 IP)
+[connect 函数][22]
+connect 用于连接服务器端，需要知道客户端的 socket 描述字，和服务器 socket(包括服务器的端口和 IP)
 
 
 **accept 函数**
@@ -379,6 +380,172 @@ WSGI 规定了 server 端交互的一个对象，所有请求 server 都会把�
 * response_headers:一个列表，包含如下形式的元组：(head_name,head_value)，用来表示 HTTP 响应的 headers
 
 
+**Queue 同步队列**
+
+[8.10. Queue — 同步队列类][35]
+
+[Python Queue模块详解][36]
+
+[Python爬虫(五)--多线程续(Queue)][37]
+
+
+**application 初始化**
+```python
+app = web.application(urls, globals())
+
+# application.py  50
+def __init__(self, mapping=(), fvars={}, autoreload=None):
+        if autoreload is None:
+            autoreload = web.config.get('debug', False)
+        self.init_mapping(mapping)
+        self.fvars = fvars
+        self.processors = [] 
+        
+        self.add_processor(loadhook(self._load))
+        self.add_processor(unloadhook(self._unload))
+```
+**app 运行**
+```python
+# hello.py 25
+if __name__ == "__main__":
+    app.run()
+```
+实际调用 wsgi 模块的 runwsgi(func)
+```python
+# application.py  310
+wsgi.runwsgi(self.wsgifunc(*middleware))
+```
+self.wsgifunc(*middleware) 作为一个 func 被传递，在响应时才进行调用
+
+**wsgi 调用 httpserver**
+```python
+# wsgi.py  25
+httpserver.runsimple(func, server_addr)
+```
+**httpserver**
+runsimple 函数首先对 func 进行了封装，再作为 server 的方法用来响应
+```python
+# httpserver.py  145
+func = StaticMiddleware(func)
+func = LogMiddleware(func)
+    
+server = WSGIServer(server_address, func)
+```
+启动 server，对 socket 进行监听
+```python
+# wsgiserver/__init__.py  1766
+while self.ready:
+    self.tick()
+```
+tick() 对 socket 进行监听并封装为 HTTPConnection，放在同步队列中
+```python
+# wsgiserver/__init__.py  1856
+self.requests.put(conn)
+```
+多线程处理函数从同步列表中获得 conn
+```python
+# wsgiserver/__init__.py  1360
+conn = self.server.requests.get()
+conn.communicate()
+```
+通过 HTTPRequest 来处理请求
+```python
+# wsgiserver/__init__.py  1230
+req = self.RequestHandlerClass(self.server, self)
+req.parse_request()
+req.respond()
+```
+通过 HTTPRequest 解析请求
+```python
+# wsgiserver/__init__.py  530
+self.rfile = SizeCheckWrapper(self.conn.rfile,
+                                      self.server.max_request_header_size)
+```
+调用 HTTPRequest 的 respond
+```python
+# wsgiserver/__init__.py  770
+self.server.gateway(self).respond()
+```
+再由 WSGI 处理，WSGI 在 HTTPServer 和 app 中作为一个中介，屏蔽了 app 对 server 的操作细节，方便独立开发应用
+```python
+# wsgiserver/__init__.py  2020
+response = self.req.server.wsgi_app(self.env, self.start_response)
+```
+最后回到 application，调用 wsgifun，其中会先调用 process
+```python
+# application  260
+result = self.handle_with_processors()
+```
+应用的返回数据由 wsgi.write 返给客户端
+```python
+# wsgiserver/__init__.py  2030
+self.write(chunk)
+```
+wsgi 实际把 chunk 传递给 HTTPRequest
+```python
+# wsgiserver/__init_.py  2090
+self.req.write(chunk)
+```
+HTTPRequest 再把数据交给 HTTPConnection，由 socket 文件处理
+```python
+# wsgiserver/__init__.py  820
+self.conn.wfile.sendall(chunk)
+
+# wsgiserver/__init__.py  1220
+self.wfile = makefile(sock, "wb", self.wbufsize)
+```
+
+
+##  OS 模块
+
+[Python 模块学习：os模块][38]
+
+```python
+# 分离文件名与扩展名
+>>> os.path.splitext('a.txt')
+('a', '.txt')
+# 返回文件名
+>>> os.path.basename('a.txt')
+'a.txt'
+>>> os.path.basename('c:\\Python\\a.txt')
+'a.txt'
+>>> 
+```
+
+**__import 函数**
+
+[import,reload,__import__在python中的区别][39]
+
+__import__ 是一个函数，接受字符串作为参数；通常在动态加载时可以使用这个函数，加载不同的字符串完成不同的加载作用
+
+```python
+__import__(module_name[, globals[, locals[, fromlist]]]) #可选参数默认为globals(),locals(),[]
+__import__('os')    
+__import__('os',globals(),locals(),['path','pip'])  #等价于from os import path, pip
+```
+
+**__class__**
+使用一个对象获得它的类，可以用来处理作为所有实例公共的变量
+```python
+class T:
+    n = 0
+    def __init__(self):
+        print "__init__"
+
+    def __call__(self):
+        print "__call__"
+
+t = T()
+t() # 才会调用 __call__
+print t.n # 输出 0
+
+t.__class__.n = 5
+s = T()
+print s.n # 输出 5
+```
+
+
+
   [1]: http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819879946007bbf6ad052463ab18034f0254bf355000
   [2]: http://blog.csdn.net/xyw_blog/article/details/18401237
   [3]: http://www.cnblogs.com/huxi/archive/2011/06/18/2084316.html
@@ -413,3 +580,8 @@ WSGI 规定了 server 端交互的一个对象，所有请求 server 都会把�
   [32]: http://www.letiantian.me/2015-09-10-understand-python-wsgi/
   [33]: https://segmentfault.com/a/1190000003069785
   [34]: ./images/1467896540337.jpg "1467896540337.jpg"
+  [35]: http://python.usyiyi.cn/python_278/library/queue.html
+  [36]: https://blog.linuxeye.com/334.html
+  [37]: http://www.jianshu.com/p/544d406e0875
+  [38]: http://www.cnblogs.com/BeginMan/p/3327291.html
+  [39]: http://blog.csdn.net/five3/article/details/7762870
