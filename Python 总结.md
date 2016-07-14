@@ -353,20 +353,35 @@ def get_request(self):
 事务处理接受 reques、client 和 server 为参数，并调用 handle（） 
 
 
+##  WSGI、flup、fastcgi、webpy
+[WSGI、flup、fastcgi、web.py的关系][29]
+
+Apache/lighttpd: 相当于一个request proxy，根据配置，把不同的请求转发给不同的server处理，例如静态的文件请求自己处理，这个时候它就像一个web server，对于fastcgi/python这样的请求转发给flup这样的Server/Gateway进行处理
+
+ flup: 一个用python写的web server，也就是cgi中所谓的Server/Gateway，它负责接受apache/lighttpd转发的请求，并调用你写的程序 (application)，并将application处理的结果返回到apache/lighttpd
+
+fastcgi: apache/lighttpd的一个模块，虽然flup可以作为一个独立的web server使用，但是对于浏览器请求处理一般都交给 apache/lighttpd处理，然后由apache/lighttpd转发给flup处理，这样就需要一个东西来把apache/lighttpd跟flup联系起来，这个东西就是fastcgi，它通过环境变量以及socket将客户端请求的信息传送给flup并接收flup返回的结果
+
+web.py: 应该说有了上面的东西你就可以开始编写你的web程序了，但是问题是你就要自己处理浏览器的输入输出，还有cookie、session、模板等各种各样的问题了，web.py的作用就是帮你把这些工作都做好了，它就是所谓的web framework，另外一个出名的是django，不过感觉太复杂了，web.py差不多就够用了
+
+WSGI : 除了flup Server/Gateway外还有很多其他人的写的Server/Gateway, 这个时候就会出问题了，如果你在flup上写了一个程序，现在由于各种原因你要使用xdly了，这个时候你的程序也许就要做很多痛苦的修改才能使用 xdly server了，WSGI就是一个规范，他规范了flup这个服务应该怎么写，应该使用什么方式什么参数调用你写的程序(application)等，当然同时也规范你的程序应该怎么写了，这样的话，只要flup跟xdly都遵守WSGI的话，你的程序在两个上面都可以使用了，flup就是一个WSGI server
+
+WSGI 是python的接口规范，这个规范是针对WEB服务器和python应用（框架等）的交互的。FASTCGI则是两者底层的通信协议的规范。
+
 ##  Web.py
 
-[【Python】Webpy 源码学习（一）][29]
+[【Python】Webpy 源码学习（一）][30]
 
 **WSGI 流程**
-[WSGI初探][30]
+[WSGI初探][31]
 
-[WSGI 简介][31]
+[WSGI 简介][32]
 
-[理解Python WSGI][32]
+[理解Python WSGI][33]
 
-[WSGI 简介][33]
+[WSGI 简介][34]
 
-![webpy 流程图][34]
+![webpy 流程图][35]
 
 WSGI 是一个规范，描述了 web server 如何与 web application 交互、web application 如何处理请求
 
@@ -382,11 +397,11 @@ WSGI 规定了 server 端交互的一个对象，所有请求 server 都会把�
 
 **Queue 同步队列**
 
-[8.10. Queue — 同步队列类][35]
+[8.10. Queue — 同步队列类][36]
 
-[Python Queue模块详解][36]
+[Python Queue模块详解][37]
 
-[Python爬虫(五)--多线程续(Queue)][37]
+[Python爬虫(五)--多线程续(Queue)][38]
 
 
 **application 初始化**
@@ -498,7 +513,7 @@ self.wfile = makefile(sock, "wb", self.wbufsize)
 
 ##  OS 模块
 
-[Python 模块学习：os模块][38]
+[Python 模块学习：os模块][39]
 
 ```python
 # 分离文件名与扩展名
@@ -514,7 +529,7 @@ self.wfile = makefile(sock, "wb", self.wbufsize)
 
 **__import 函数**
 
-[import,reload,__import__在python中的区别][39]
+[import,reload,__import__在python中的区别][40]
 
 __import__ 是一个函数，接受字符串作为参数；通常在动态加载时可以使用这个函数，加载不同的字符串完成不同的加载作用
 
@@ -545,7 +560,6 @@ print s.n # 输出 5
 ```
 
 
-
   [1]: http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819879946007bbf6ad052463ab18034f0254bf355000
   [2]: http://blog.csdn.net/xyw_blog/article/details/18401237
   [3]: http://www.cnblogs.com/huxi/archive/2011/06/18/2084316.html
@@ -574,14 +588,15 @@ print s.n # 输出 5
   [26]: http://www.cnblogs.com/shiyangxt/archive/2008/10/07/1305506.html
   [27]: http://www.blogs8.cn/posts/Wx8G9b8
   [28]: ./images/1466930857819.jpg "1466930857819.jpg"
-  [29]: http://diaocow.iteye.com/blog/1922760
-  [30]: http://linluxiang.iteye.com/blog/799163
-  [31]: http://blog.csdn.net/on_1y/article/details/18803563
-  [32]: http://www.letiantian.me/2015-09-10-understand-python-wsgi/
-  [33]: https://segmentfault.com/a/1190000003069785
-  [34]: ./images/1467896540337.jpg "1467896540337.jpg"
-  [35]: http://python.usyiyi.cn/python_278/library/queue.html
-  [36]: https://blog.linuxeye.com/334.html
-  [37]: http://www.jianshu.com/p/544d406e0875
-  [38]: http://www.cnblogs.com/BeginMan/p/3327291.html
-  [39]: http://blog.csdn.net/five3/article/details/7762870
+  [29]: https://www.douban.com/note/13508388/
+  [30]: http://diaocow.iteye.com/blog/1922760
+  [31]: http://linluxiang.iteye.com/blog/799163
+  [32]: http://blog.csdn.net/on_1y/article/details/18803563
+  [33]: http://www.letiantian.me/2015-09-10-understand-python-wsgi/
+  [34]: https://segmentfault.com/a/1190000003069785
+  [35]: ./images/1467896540337.jpg "1467896540337.jpg"
+  [36]: http://python.usyiyi.cn/python_278/library/queue.html
+  [37]: https://blog.linuxeye.com/334.html
+  [38]: http://www.jianshu.com/p/544d406e0875
+  [39]: http://www.cnblogs.com/BeginMan/p/3327291.html
+  [40]: http://blog.csdn.net/five3/article/details/7762870
