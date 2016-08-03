@@ -11,11 +11,13 @@ grammar_cjkRuby: true
 
 [Java研发方向如何准备BAT技术面试][2]
 
+[115个Java面试题和答案——终极列表][3]
+
 ##  反射
 
-[深入研究 java.lang.Class 类][3]
+[深入研究 java.lang.Class 类][4]
 
-[Java 反射机制(包括组成、结构、示例说明等内容)][4]
+[Java 反射机制(包括组成、结构、示例说明等内容)][5]
 
 通俗来讲呢，就是在运行状态中，我们可以根据“类的部分已经的信息”来还原“类的全部的信息”。这里“类的部分已经的信息”，可以是“类名”或“类的对象”等信息
 
@@ -43,7 +45,7 @@ Class cl = Manager.class;
 
 ##  final 关键词
 
-[浅析Java中的final关键字][5]
+[浅析Java中的final关键字][6]
 
 * 修饰类
 类不能被继承
@@ -72,7 +74,7 @@ Class cl = Manager.class;
 - `面向过程是一件事“该怎么做“，面向对象是一件事“该让谁来做”，然后那个“谁”就是对象，他要怎么做是他自己的事，反正最后一群对象合力能把事做好就行了。`
  2. Java的四个基本特性（抽象、封装、继承，多态）
 
-[java的四个特性（抽象，封装，继承，多态），对多态使用方式的理解][6]
+[java的四个特性（抽象，封装，继承，多态），对多态使用方式的理解][7]
 
 - 抽象
 
@@ -93,7 +95,7 @@ Class cl = Manager.class;
 
  4. Overload和Override的区别
 
-[ Java中的继承、封装、多态、抽象][7]
+[ Java中的继承、封装、多态、抽象][8]
 
 -    方法的重写Overriding和重载Overloading是Java多态性的不同表现。重写Overriding是父类与子类之间多态性的一种 表现，重载Overloading是一个类中多态性的一种表现。如果在子类中定义某方法与其父类有相同的名称和参数，我们说该方法被重写 (Overriding)。子类的对象使用这个方法时，将调用子类中的定义，对它而言，父类中的定义如同被“屏蔽”了。如果在一个类中定义了多个同名的方 法，它们或有不同的参数个数或有不同的参数类型，则称为方法的重载(Overloading)。Overloaded的方法是可以改变返回值的类型。方法的重写Overriding和重载Overloading是Java多态性的不同表现。
 
@@ -102,20 +104,70 @@ Class cl = Manager.class;
 
  6. 访问控制符public,protected,private,以及默认的区别
 
-是否可以继承String类
+|  修饰符  | 当前类   | 同包    | 子类    |其他包     |
+| :---: | :---: | :---: | :---: | :---: |
+|   public  |  √   |  √   |  √   |  √   |
+|  protected   |  √   | √    | √    | ×    |
+|   default  |  √   |  √   |  ×   |   ×  |
+| private|√|×|×|×|
 
- 7. String和StringBuffer、StringBuilder的区别
+ 1. 是否可以继承String类
+ 
+ [Java String 源码浅析][9]
+ [String 实现][10]
+ [在java中String类为什么要设计成final][11]
+`String` 是 final 修饰不能够继承
+```java
+public final class String{
+	private final char value[];
+	...
+}
+```
+为了**安全**不可变,在 `HashSet` 的 `Key` 里面,变动就出问题了
 
- 8. hashCode和equals方法的关系
+ 2. String和StringBuffer、StringBuilder的区别
+[java中String、StringBuffer、StringBuilder的区别][12]
 
- 9. 抽象类和接口的区别
+**可变性**
+`String` 不可变,`StringBuffer` 和 `StringBuilder` 可变
 
- 10. 自动装箱与拆箱
+**线程安全性**
+`String` 和 `StingBuffer` 是线程安全的
 
-fgg
+**原理**
+[Java StringBuilder和StringBuffer源码分析][13]
+`StringBuffer` 和 `StringBuilder` 都是调用抽象父类 `AbstractStringBuilder` 的实现而已,不同之处在于 `StringBuffer` 加了同步关键词 `synchronized
+
+
+
+ 3. hashCode和equals方法的关系
+[hashCode与equals的区别与联系][14]
+* `equals` 方法用于比较对象
+* `hashcode` 用于集合中
+* 将对象放入到集合中时，首先判断要放入对象的hashcode值与集合中的任意一个元素的hashcode值是否相等，如果不相等直接将该对象放入集合中。如果hashcode值相等，然后再通过equals方法判断要放入对象与集合中的任意一个对象是否相等，如果equals判断不相等，直接将该元素放入到集合中，否则不放入。
+
+[ java中的hashCode()和equals()的关系][15]
+* 重写 `equals`,判断 `HashSet` 中元素不会重复
+* 重写 `hashCode` 提高 `HashMap` 比对性能
+
+**`==` 和 `equals` 的区别**
+* == 判断是否为同一个对象,比对内存空间地址
+* `equals` 被覆写后,由程序控制,`String` 类比对的是内容是否相同
+
+ 4. 抽象类和接口的区别
+[接口和抽象类有什么区别][16]
+* 抽象类是对根源的抽象,接口是对动作的抽象,抽象一组动作,不同的类不同的实现
+* 接口中方法都是抽象的,不能实现,抽象类可以
+* 接口中可以由 `static` 类型数据,抽象类没有
+
+ 5. 自动装箱与拆箱
+[Java 自动装箱与拆箱(Autoboxing and unboxing)][17]
+* 自动装箱是由值构建对象,构建对象是为了使用类提供的方法
+* 拆箱是由对象返回值,能够很好的运算
+
+
 
  1. 什么是泛型、为什么要使用以及泛型擦除
-    
  2. Java中的集合类及关系图
  3. HashMap实现原理(看源代码)
  4. HashTable实现原理(看源代码)
@@ -283,8 +335,18 @@ fgg
 
   [1]: http://blog.csdn.net/jackfrued/article/details/44921941
   [2]: http://www.jianshu.com/p/05f42258850b
-  [3]: http://lavasoft.blog.51cto.com/62575/15433
-  [4]: http://wangkuiwu.github.io/2012/03/04/reflection/
-  [5]: http://www.cnblogs.com/dolphin0520/p/3736238.html
-  [6]: http://dotdotcloud.cn/2016/06/20/java%E7%9A%84%E5%9B%9B%E4%B8%AA%E7%89%B9%E6%80%A7%EF%BC%88%E6%8A%BD%E8%B1%A1%EF%BC%8C%E5%B0%81%E8%A3%85%EF%BC%8C%E7%BB%A7%E6%89%BF%EF%BC%8C%E5%A4%9A%E6%80%81%EF%BC%89%EF%BC%8C%E5%AF%B9%E5%A4%9A%E6%80%81%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F%E7%9A%84%E7%90%86%E8%A7%A3/
-  [7]: http://zjf201172653.iteye.com/blog/1921945
+  [3]: http://www.importnew.com/10980.html
+  [4]: http://lavasoft.blog.51cto.com/62575/15433
+  [5]: http://wangkuiwu.github.io/2012/03/04/reflection/
+  [6]: http://www.cnblogs.com/dolphin0520/p/3736238.html
+  [7]: http://dotdotcloud.cn/2016/06/20/java%E7%9A%84%E5%9B%9B%E4%B8%AA%E7%89%B9%E6%80%A7%EF%BC%88%E6%8A%BD%E8%B1%A1%EF%BC%8C%E5%B0%81%E8%A3%85%EF%BC%8C%E7%BB%A7%E6%89%BF%EF%BC%8C%E5%A4%9A%E6%80%81%EF%BC%89%EF%BC%8C%E5%AF%B9%E5%A4%9A%E6%80%81%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F%E7%9A%84%E7%90%86%E8%A7%A3/
+  [8]: http://zjf201172653.iteye.com/blog/1921945
+  [9]: https://segmentfault.com/a/1190000003002786
+  [10]: http://www.docjar.com/html/api/java/lang/String.java.html
+  [11]: https://www.zhihu.com/question/31345592
+  [12]: http://www.cnblogs.com/xudong-bupt/p/3961159.html
+  [13]: https://segmentfault.com/a/1190000004261063
+  [14]: http://blog.csdn.net/afgasdg/article/details/6889383
+  [15]: http://blog.csdn.net/whuslei/article/details/6686612
+  [16]: http://blog.csdn.net/fenglibing/article/details/2745123
+  [17]: http://www.cnblogs.com/danne823/archive/2011/04/22/2025332.html
