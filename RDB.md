@@ -1,7 +1,7 @@
 
 ##  数据结构 rio
 持久化的IO操作在rio.h和rio.c中实现，struct rio既适用于文件，又适用于内存缓存
-抽象了文件和内存操作
+抽象了文件和内存操作    
 ```cpp
 struct _rio {
 
