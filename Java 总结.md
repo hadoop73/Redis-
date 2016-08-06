@@ -100,7 +100,21 @@ Class cl = Manager.class;
 -    方法的重写Overriding和重载Overloading是Java多态性的不同表现。重写Overriding是父类与子类之间多态性的一种 表现，重载Overloading是一个类中多态性的一种表现。如果在子类中定义某方法与其父类有相同的名称和参数，我们说该方法被重写 (Overriding)。子类的对象使用这个方法时，将调用子类中的定义，对它而言，父类中的定义如同被“屏蔽”了。如果在一个类中定义了多个同名的方 法，它们或有不同的参数个数或有不同的参数类型，则称为方法的重载(Overloading)。Overloaded的方法是可以改变返回值的类型。方法的重写Overriding和重载Overloading是Java多态性的不同表现。
 
  5. 构造器Constructor是否可被override
+[ Java中的构造方法总结][9]
 
+**构造器不能被 Override**
+* 构造器可以有任何访问的修饰符，public、private、protected或者没有修饰符，都可以对构造方法进行修饰
+* 没有返回类型
+* 如果类没有自己的构造器,都会有一个默认构造方法
+* this和super:this指向当前的实例对象,在构造方法中使用时,指向其他构造器且必须放第一行,static 方法不可以使用 this 对象.super指向父类对象,也可以做构造器使用,必须在第一行
+* 类成员变量先于构造器初始化,static 先于普通变量,且只运行一次,如果主类中含有静态变量会在main()方法执行前初始化.
+* 由此总结初始化顺序：
+	* 1．父类的静态成员
+	* 2．子类的静态成员
+	* 3．父类的非静态成员
+	* 4．父类的默认构造函数被调用。 
+	* 5．子类的非静态对象（变量） 
+	* 6．子类的构造函数。 
 
  6. 访问控制符public,protected,private,以及默认的区别
 
@@ -113,9 +127,9 @@ Class cl = Manager.class;
 
  1. 是否可以继承String类
  
- [Java String 源码浅析][9]
- [String 实现][10]
- [在java中String类为什么要设计成final][11]
+ [Java String 源码浅析][10]
+ [String 实现][11]
+ [在java中String类为什么要设计成final][12]
 `String` 是 final 修饰不能够继承
 ```java
 public final class String{
@@ -126,7 +140,7 @@ public final class String{
 为了**安全**不可变,在 `HashSet` 的 `Key` 里面,变动就出问题了
 
  2. String和StringBuffer、StringBuilder的区别
-[java中String、StringBuffer、StringBuilder的区别][12]
+[java中String、StringBuffer、StringBuilder的区别][13]
 
 **可变性**
 `String` 不可变,`StringBuffer` 和 `StringBuilder` 可变
@@ -135,18 +149,18 @@ public final class String{
 `String` 和 `StingBuffer` 是线程安全的
 
 **原理**
-[Java StringBuilder和StringBuffer源码分析][13]
+[Java StringBuilder和StringBuffer源码分析][14]
 `StringBuffer` 和 `StringBuilder` 都是调用抽象父类 `AbstractStringBuilder` 的实现而已,不同之处在于 `StringBuffer` 加了同步关键词 `synchronized
 
 
 
  3. hashCode和equals方法的关系
-[hashCode与equals的区别与联系][14]
+[hashCode与equals的区别与联系][15]
 * `equals` 方法用于比较对象
 * `hashcode` 用于集合中
 * 将对象放入到集合中时，首先判断要放入对象的hashcode值与集合中的任意一个元素的hashcode值是否相等，如果不相等直接将该对象放入集合中。如果hashcode值相等，然后再通过equals方法判断要放入对象与集合中的任意一个对象是否相等，如果equals判断不相等，直接将该元素放入到集合中，否则不放入。
 
-[ java中的hashCode()和equals()的关系][15]
+[ java中的hashCode()和equals()的关系][16]
 * 重写 `equals`,判断 `HashSet` 中元素不会重复
 * 重写 `hashCode` 提高 `HashMap` 比对性能
 
@@ -155,21 +169,81 @@ public final class String{
 * `equals` 被覆写后,由程序控制,`String` 类比对的是内容是否相同
 
  4. 抽象类和接口的区别
-[接口和抽象类有什么区别][16]
+[接口和抽象类有什么区别][17]
 * 抽象类是对根源的抽象,接口是对动作的抽象,抽象一组动作,不同的类不同的实现
 * 接口中方法都是抽象的,不能实现,抽象类可以
 * 接口中可以由 `static` 类型数据,抽象类没有
 
  5. 自动装箱与拆箱
-[Java 自动装箱与拆箱(Autoboxing and unboxing)][17]
+[Java 自动装箱与拆箱(Autoboxing and unboxing)][18]
 * 自动装箱是由值构建对象,构建对象是为了使用类提供的方法
 * 拆箱是由对象返回值,能够很好的运算
 
 
 
  1. 什么是泛型、为什么要使用以及泛型擦除
+
+[Java泛型的好处][19]
+* 类型安全:放入数据的时候,会进行类型检查,确保放入可接受的类型
+* 消除强制类型转化:取数据不需要类型转换,避免出错
+* 提高代码复用
+
+泛型的本质是参数化类型，也就是说所操作的数据类型被指定为一个参数.
+
+[java泛型（二）、泛型的内部原理：类型擦除以及类型擦除带来的问题][20]
+
+**类型擦除**
+在生成的Java字节码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数，会在编译器在编译的时候去掉。这个过程就称为类型擦除。
+
+原始类型（raw type）就是擦除去了泛型信息，最后在字节码中的类型变量的真正类型。无论何时定义一个泛型类型，相应的原始类型都会被自动地提供。类型变量被擦除（crased），并使用其限定类型（无限定的变量用Object）替换。
+
  2. Java中的集合类及关系图
+[Java 集合类图(转)][21]
+[Java 集合总结（Collection系列与Map系列）][22]
+
+Java 结合类的两个接口:Collection 和 Map,它们包含了一些其他接口(Iterator接口)
+
+![enter description here][23]
+
+![enter description here][24]
+
+Set,List 和 Map用途
+* List 集合是有序集合,元素可以重复
+* Set 集合无序集合,不能又重复元素
+* Map 集合保存　Key-Value 键值对,通过 Key 来访问 Value
+
+**List**
+[Java 集合：Collection，List，ArrayList，Vector，LinkedList（实现方式，对比）][25]
+
+* ArrayList 基于数组非线程安全.添加元素会先进行容量越界判定,必要时扩容
+
+```java
+elementData = Arrays.copyOf(elementData, newCapacity);
+```
+* Vector 线程安全,也是基于数组实现,Collections 这个类当中为我们提供的 synchronizedList(List list)，它可以返回一个线程安全的同步的列表，还提供了返回同步的 Collections
+* LinkedList 基于链表实现,非线程安全.
+
+**Set**
+[Java集合总结汇总(链接)][26]
+Set 中元素实现了一个有效的 equals(Object) 方法
+HashSet 由哈希表支持,但不是同步的,可以通过以下语句实现同步转换
+```java
+Set s = Collections.synchronizedSet(new HashSet(...));
+```
+**Map**
+[Java 集合总结（Collection系列与Map系列）][27]
+
+![enter description here][28]
+
+* HashMap 非同步,不保证顺序,允许空值和空键
+* LinkedHashMap:继承自HashMap,Iterator 保证先后顺序
+* TreeMap:能够根据 Key 值有序插入,使用了红黑树
+* HashTable:HashMap 线程安全版本,同步,效率低
+* ConcurrentHashMap:也是 HashMap 的线程安全版本,使用了分段加锁机制,效率比 HashTable 高.
+
+
  3. HashMap实现原理(看源代码)
+
  4. HashTable实现原理(看源代码)
  5. HashMap和HashTable区别
  6. HashTable如何实现线程安全(看源代码)
@@ -341,12 +415,23 @@ public final class String{
   [6]: http://www.cnblogs.com/dolphin0520/p/3736238.html
   [7]: http://dotdotcloud.cn/2016/06/20/java%E7%9A%84%E5%9B%9B%E4%B8%AA%E7%89%B9%E6%80%A7%EF%BC%88%E6%8A%BD%E8%B1%A1%EF%BC%8C%E5%B0%81%E8%A3%85%EF%BC%8C%E7%BB%A7%E6%89%BF%EF%BC%8C%E5%A4%9A%E6%80%81%EF%BC%89%EF%BC%8C%E5%AF%B9%E5%A4%9A%E6%80%81%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F%E7%9A%84%E7%90%86%E8%A7%A3/
   [8]: http://zjf201172653.iteye.com/blog/1921945
-  [9]: https://segmentfault.com/a/1190000003002786
-  [10]: http://www.docjar.com/html/api/java/lang/String.java.html
-  [11]: https://www.zhihu.com/question/31345592
-  [12]: http://www.cnblogs.com/xudong-bupt/p/3961159.html
-  [13]: https://segmentfault.com/a/1190000004261063
-  [14]: http://blog.csdn.net/afgasdg/article/details/6889383
-  [15]: http://blog.csdn.net/whuslei/article/details/6686612
-  [16]: http://blog.csdn.net/fenglibing/article/details/2745123
-  [17]: http://www.cnblogs.com/danne823/archive/2011/04/22/2025332.html
+  [9]: http://blog.csdn.net/zmissm/article/details/14176725
+  [10]: https://segmentfault.com/a/1190000003002786
+  [11]: http://www.docjar.com/html/api/java/lang/String.java.html
+  [12]: https://www.zhihu.com/question/31345592
+  [13]: http://www.cnblogs.com/xudong-bupt/p/3961159.html
+  [14]: https://segmentfault.com/a/1190000004261063
+  [15]: http://blog.csdn.net/afgasdg/article/details/6889383
+  [16]: http://blog.csdn.net/whuslei/article/details/6686612
+  [17]: http://blog.csdn.net/fenglibing/article/details/2745123
+  [18]: http://www.cnblogs.com/danne823/archive/2011/04/22/2025332.html
+  [19]: http://blog.csdn.net/shanliangliuxing/article/details/7402684
+  [20]: http://blog.csdn.net/lonelyroamer/article/details/7868820
+  [21]: http://www.cnblogs.com/bob-fd/archive/2012/09/20/2695437.html
+  [22]: https://github.com/pzxwhc/MineKnowContainer/issues/75
+  [23]: ./images/1470379636414.jpg "1470379636414.jpg"
+  [24]: ./images/1470379648314.jpg "1470379648314.jpg"
+  [25]: https://www.wuhuachuan.com/visitor/learning/article/getArticleDetail?id=e2d86b1a-99fd-42c8-bf47-7de763aafd75
+  [26]: http://www.cnblogs.com/Bob-FD/archive/2012/09/20/2695458.html
+  [27]: https://github.com/pzxwhc/MineKnowContainer/issues/75
+  [28]: ./images/1470381246803.jpg "1470381246803.jpg"
