@@ -252,27 +252,143 @@ Set s = Collections.synchronizedSet(new HashSet(...));
  9. Collection和Collections的区别
  10. Concurrenthashmap实现原理(看源代码)
  11. Error、Exception区别
+[Java的Exception和Error面试题10问10答][29]
+
+Error 和 Exception 都继承自 Throwable,不同处如下:
+
+
+**Error**
+* 总是不可控
+* 经常用来表示系统错误或底层资源错误
+* 应该在系统级被捕捉
+
+**Exception**
+*  可以是可控(checked)或不可控的(unchecked)
+*  表示一个由程序员导致的错误
+*  应该在应用程序级被处理
+
+
  12. Unchecked Exception和Checked Exception，各列举几个
+
+[Throwable、Error、Exception、RuntimeException 区别 联系][30]
+
+* Checked exception: 这类异常都是Exception的子类 。异常的向上抛出机制进行处理，假如子类可能产生A异常，那么在父类中也必须throws A异常。可能导致的问题：代码效率低，耦合度过高。
+　　
+* Unchecked exception: 这类异常都是RuntimeException的子类，虽然RuntimeException同样也是Exception的子类，但是它们是非凡的，它们不能通过client code来试图解决，所以称为Unchecked exception 。
+
+
  13. Java中如何实现代理机制(JDK、CGLIB)
  14. 多线程的实现方式
  15. 线程的状态转换
  16. 如何停止一个线程
  17. 什么是线程安全
+当多个线程访问某个类时,这个类始终都能够表现出正确的行为,就称这个类是线程安全的
+线程安全是编程中的术语，指某个函数、函数库在多线程环境中被调用时，能够正确地处理多个线程之间的共享变量，使程序功能正确完成。
+
  18. 如何保证线程安全
  19. Synchronized如何使用
+[Java 多线程：synchronized 关键字用法（修饰类，方法，静态方法，代码块）][31]
+
+* 修饰一个类，其作用的范围是synchronized后面括号括起来的部分，作用的对象是这个类的所有对象。
+* 修饰一个方法，被修饰的方法称为同步方法，其作用的范围是整个方法，作用的对象是调用这个方法的对象； 
+* 修改一个静态的方法，其作用的范围是整个静态方法，作用的对象是这个类的所有对象； 
+* 修饰一个代码块，被修饰的代码块称为同步语句块，其作用的范围是大括号{}括起来的代码，作用的对象是调用这个代码块的对象；
+
+
  20. synchronized和Lock的区别
+[Java 多线程：Lock接口（接口方法分析，ReentrantLock，ReadWriteLock）][32]
+[synchronized与lock的区别][33]
+* synchronize:效率低,使用更简单
+* Lock:更加细粒度,复杂,适合 synchronize 场景,不会自动释放锁,获取锁的过程可以被中断 interrupt()
+
+
  21. 多线程如何进行信息交互
  22. sleep和wait的区别(考察的方向是是否会释放锁)
  23. 多线程与死锁
+[死锁][34]
+
  24. 如何才能产生死锁
+
+加锁机制能确保线程安全,但过度使用加锁,可能导致锁顺序死锁;我们使用线程池和信号量来限制资源的使用,可能会导致资源死锁
+
  25. 什么叫守护线程，用什么方法实现守护线程
+[Java中守护线程的总结][35]
+
+JVM 停止,守护线程会依旧运行,如果守护线程的资源没清理将会泄露,如垃圾回收器以及其他辅助工作的线程. 
+
+```java
+Thread daemonTread = new Thread();  
+   
+//设定 daemonThread 为守护线程，default false(非守护线程)  
+ daemonThread.setDaemon(true);  
+```
+
  26. Java线程池技术及原理
+
+Executor 基于生产者-消费者模式,提交任务的操作相当于生产者,执行任务的线程则相当于消费者.
+
+```java
+public class WithinThreadExecutor implements Executor{
+    public void execute(Runnable r){
+		r.run(); // 创建了任务,调用 execute(r)	
+    }
+}
+```
+在 Executor 框架中,已提交但尚未开始的任务可以取消,对已经开始执行的任务,只有当它们能响应中断时,才能取消
+
+Runnable 和 Callable 描述的都是抽象的计算任务.Future 表示一个任务的生命周期,提供了响应的方法来判断是否已经完成或取消,ExecutorService 中的所有 submit 方法都将返回一个 Future,由此可以获得任务的执行结果或者取消任务.
+
+CompletionService 将 Executor 和 BlockingQueue 的功能融合在一起,将 Callable 任务提交给它执行,使用类似队列操作的 take 和 poll 获得已经完成的封装成 Future 的结果.
+```java
+CompletionService<ImageData> com = new ExecutorCompletionService<ImageData>(executor);
+Future<ImageData> f = com.take();
+ImageData imageData = f.get();
+```
+
+
+
+
+
  27. java并发包concurrent及常用的类
  28. volatile关键字
+volatile 变量不会被缓存在寄存器或其他处理器看不见的地方,因此读取 volatile 类型的变量总会返回最新写入值.通常用作某个操作完成,发生中断或者状态的标志.满足下面条件才使用:
+* 对变量的写入操作不依赖变量的当前值
+* 变量不会与其他状态变量一起纳入不变性条件
+* 访问变量时不需要加锁
+
  29. Java中的NIO，BIO，AIO分别是什么
  30. IO和NIO区别
  31. 序列化与反序列化
+
+[深入分析Java的序列化与反序列化][36]
+
+* 序列化： 将数据结构或对象转换成二进制串的过程。
+* 反序列化：将在序列化过程中所生成的二进制串转换成数据结构或者对象的过程。
+
+使用 Java 对象序列化,在保存对象时,会把状态保存为一组字节,保存的是对象的**状态,对象序列化不会关注类中的静态变量**.
+
+* 在Java中，只要一个类实现了 `java.io.Serializable` 接口，那么它就可以被序列化。
+
+* 通过 `ObjectOutputStream` 和 `ObjectInputStream` 对对象进行序列化及反序列化
+
+ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化和反序列化过程.
+
  32. 常见的序列化协议有哪些
+
+[序列化和反序列化][37]
+
+* XML:跨机器,跨语言.缺点:冗长复杂
+* SOAP:基于XML为序列化和反序列化协议的结构化消息传递协议.
+* JSON:可读性强,协议简单,解析速度快.序列化和反序列化需要采用反射机制,性能要求为ms级别,不建议使用.
+* Thrift:Facebook 开源轻量级RPC服务框架,由于Thrift的序列化被嵌入到Thrift框架里面,Thrift框架本身没有序列化和反序列化接口,很难和其他传输层协议共同使用.
+* Protobuf:Google 序列化协议
+	* 序列化数据简介,紧凑,与XML相比,数据量约为1/3到1/10
+	* 解析速度非常好,比对应的XML快约20-100倍
+	* 使用非常简介,反序列化只需要一行代码
+
+* Avro:Apache Hadoop 一个子项目,提供两种序列化格式:JSON格式或Binary格式.Binary格式在空间开销和解析性能方面可以和Protobuf媲美
+
+
  33. 内存溢出和内存泄漏的区别
  34. Java内存模型及各个区域的OOM，如何重现OOM
  35. 出现OOM如何解决
@@ -435,3 +551,12 @@ Set s = Collections.synchronizedSet(new HashSet(...));
   [26]: http://www.cnblogs.com/Bob-FD/archive/2012/09/20/2695458.html
   [27]: https://github.com/pzxwhc/MineKnowContainer/issues/75
   [28]: ./images/1470381246803.jpg "1470381246803.jpg"
+  [29]: http://www.oschina.net/translate/10-java-exception-and-error-interview-questions-answers-programming
+  [30]: http://blog.csdn.net/liuj2511981/article/details/8524418
+  [31]: https://github.com/pzxwhc/MineKnowContainer/issues/7
+  [32]: https://github.com/pzxwhc/MineKnowContainer/issues/16
+  [33]: http://blog.lastww.com/2015/02/04/difference-between-java-lock-and-synchronized/
+  [34]: http://ifeve.com/deadlock/
+  [35]: http://blog.csdn.net/shimiso/article/details/8964414
+  [36]: http://www.hollischuang.com/archives/1140
+  [37]: http://www.infoq.com/cn/articles/serialization-and-deserialization
