@@ -396,12 +396,127 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
  37. Java内存管理及回收算法
  38. Java类加载器及如何加载类(双亲委派)
  39. xml解析方式
+
+[四种生成和解析XML文档的方法详解][38]
+[Java解析XML的四种方法][39]
+
+**DOM/SAX/JDOM/DOM4J**
+* DOM
+	* 允许应用程序对数据和结构做出修改
+	* 可以在任何时候在树中获取数据
+	* 加载整个XML文档来构造层次结构,消耗资源大
+* SAX
+	* 不需要等待所有数据都被处理,分析就能立即开始
+	* 不需要保存在内存中
+	* 很难同时访问同一个文档的不同部分数据
+* JDOM
+	* 使用具体类而不是接口
+	* 大量使用了Java集合类
+	* 没有较好的灵活性,性能差
+
+* DOM4J
+	* 大量使用Java集合类
+	* 支持XPath,性能好
+	* 大量使用接口,API复杂
+
+[Dom4j解析XML学习代码][40]
+```java
+/*建立document对象*/
+Document document = DocumentHelper.createDocument();
+/*建立XML文档的根books*/
+Element booksElement = document.addElement("books");
+/*加入一行注释*/
+booksElement.addComment("This is a test for dom4j, ZHe, 2012.11.26");
+/*加入第一个book节点*/
+Element bookElement = booksElement.addElement("book");
+/*加入show属性内容*/
+bookElement.addAttribute("show", "yes");
+/*加入title节点*/
+Element titleElement = bookElement.addElement("title");
+/*为title设置内容*/
+titleElement.setText("Dom4j Tutorials");
+```
+
+
  40. Statement和PreparedStatement之间的区别
 
 ## JavaEE:
 
- 1. servlet生命周期及各个方法
- 2. servlet中如何自定义filter
+1. servlet生命周期及各个方法
+
+[Servlet生命周期与工作原理][41]
+
+Servlet 生命周期分为三个阶段:
+* 初始化阶段  调用init()方法
+
+* 响应客户请求阶段　　调用service()方法
+
+* 终止阶段　　调用destroy()方法
+
+Servlet 容器启动时自动装载 Servlet,创建一个 Servlet 实例并且调用 Servlet 的 init() 方法进行初始化.
+
+客户发送一个请求,Servlet 调用 service() 方法对请求进行响应,再根据请求的方式进行匹配,选择调用 doGet,doPost等方法.
+
+2. servlet中如何自定义filter
+
+[Servlet中的Filter过滤器的介绍和使用][42]
+
+
+过滤器是一个程序，它先于与之相关的servlet或JSP页面运行在服务器上。它能够对Servlet容器的请求和响应对象进行检查和修改。
+
+* Servlet过滤器本身并不生成请求和响应对象，只是提供过滤功能。
+
+* Servlet过滤器能够在Servlet被调用之前检查Request对象，并修改Request Header和Request内容；
+
+* 在Servlet被调用之后检查Response对象，修改Response Header和Response的内容。
+
+* Servlet过滤器可以过滤的Web组件包括Servlet，JSP和HTML等文件。
+
+init():Servlet 容器创建Servlet过滤器实例后将调用该方法,读取web.xml文件中Servlet过滤器的初始化参数
+
+doFilter():完成过滤功能
+
+destroy():Servlet容器销毁过滤器实例前调用该方法,释放Servlet过滤器占用的资源.
+
+```xml
+<filter>
+      <filter-name>LoginFilter</filter-name>
+      <filter-class>com.itzhai.login.LoginFilter</filter-class>
+      <init-param>
+          <param-name>username</param-name>
+          <param-value>arthinking</param-value>
+      </init-param>
+  </filter>
+```
+
+```java
+@Override
+public void init(FilterConfig filterConfig) throws ServletException {
+    //获取Filter初始化参数
+    String username = filterConfig.getInitParameter("username");
+}
+````
+
+**过滤敏感词汇**
+```java
+@Override
+public void doFilter(ServletRequest request, ServletResponse response,
+        FilterChain chain) throws IOException, ServletException {
+        //转换成实例的请求和响应对象
+        HttpServletRequest req = (HttpServletRequest)request;
+        HttpServletResponse resp = (HttpServletResponse)response;
+        //获取评论并屏蔽关键字
+        String comment = req.getParameter("comment");
+        comment = comment.replace("A", "***");
+        //重新设置参数
+        req.setAttribute("comment", comment);
+        // 继续执行
+        chain.doFilter(request,response);
+ }
+```
+
+`Filter` 的执行顺序与在 `web.xml` 配置文件中的配置顺序一致,一般把 `Filter` 配置在所有的 `Servlet` 之前.
+
 
 ### JSP原理
 
@@ -560,3 +675,8 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
   [35]: http://blog.csdn.net/shimiso/article/details/8964414
   [36]: http://www.hollischuang.com/archives/1140
   [37]: http://www.infoq.com/cn/articles/serialization-and-deserialization
+  [38]: http://www.cnblogs.com/lanxuezaipiao/archive/2013/05/17/3082949.html
+  [39]: http://my.oschina.net/u/242764/blog/482685
+  [40]: http://www.cnblogs.com/CheeseZH/archive/2012/11/28/2791914.html
+  [41]: http://www.cnblogs.com/cuiliang/archive/2011/10/21/2220671.html
+  [42]: http://www.itzhai.com/java-web-notes-servlet-filters-in-the-filter-writing-the-introduction-and-use-of-filters.html#read-more
