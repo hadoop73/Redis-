@@ -390,6 +390,13 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
 
 
  33. 内存溢出和内存泄漏的区别
+
+[内存溢出和内存泄漏的区别][38]
+
+* 内存溢出:使用的内存超出系统提供的容量,出现内存溢出
+* 内存泄露:申请后,无法正常释放,因此内存得不到正常回收使用,出现泄露
+
+
  34. Java内存模型及各个区域的OOM，如何重现OOM
  35. 出现OOM如何解决
  36. 用什么工具可以查出内存泄漏
@@ -397,8 +404,8 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
  38. Java类加载器及如何加载类(双亲委派)
  39. xml解析方式
 
-[四种生成和解析XML文档的方法详解][38]
-[Java解析XML的四种方法][39]
+[四种生成和解析XML文档的方法详解][39]
+[Java解析XML的四种方法][40]
 
 **DOM/SAX/JDOM/DOM4J**
 * DOM
@@ -419,7 +426,7 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
 	* 支持XPath,性能好
 	* 大量使用接口,API复杂
 
-[Dom4j解析XML学习代码][40]
+[Dom4j解析XML学习代码][41]
 ```java
 /*建立document对象*/
 Document document = DocumentHelper.createDocument();
@@ -440,11 +447,51 @@ titleElement.setText("Dom4j Tutorials");
 
  40. Statement和PreparedStatement之间的区别
 
+[Java笔记：Statement和PreparedStatement的区别][42]
+[【转】PreparedStatement和Statement区别][43]
+
+数据库会对 PreparedStatement 数据库进行预编译,下次相同的 sql 语句时,数据库端不会再进行预编译,而直接用数据库的缓冲区(使用了?),提高数据访问的效率
+
+ 41. 动态代理
+
+[Java 动态代理作用是什么？][44]
+
+静态代理:如果类方法数量越来越多的时候，代理类的代码量是十分庞大的
+
+动态代理的作用是什么：
+* Proxy 类的代码量被固定下来，不会因为业务的逐渐庞大而庞大；
+* 可以实现 AOP 编程，实际上静态代理也可以实现，总的来说，AOP 可以算作是代理模式的一个典型应用；
+* 解耦，通过参数就可以判断真实类，不需要事先实例化，更加灵活多变。
+
+ 42. RPC
+
+[为什么需要RPC，而不是简单的HTTP接口][45]
+[ 深入浅出 RPC - 浅出篇][46]
+[深入浅出 RPC - 深入篇][47]
+
+远程过程调用属于长连接
+
+ 43. 枚举
+
+[Java 枚举会比静态常量更消耗内存吗？][48]
+
+枚举的实现原理,就是定义了一个类,实例化final修饰的元素,每个实例都有自己的元信息.比自己定义的常量耗内存,但是枚举可读性,扩展性更好
+
+ 44. 
+
+ 45. 
+
+
+
+
+
+
+
 ## JavaEE:
 
 1. servlet生命周期及各个方法
 
-[Servlet生命周期与工作原理][41]
+[Servlet生命周期与工作原理][49]
 
 Servlet 生命周期分为三个阶段:
 * 初始化阶段  调用init()方法
@@ -459,7 +506,7 @@ Servlet 容器启动时自动装载 Servlet,创建一个 Servlet 实例并且调
 
 2. servlet中如何自定义filter
 
-[Servlet中的Filter过滤器的介绍和使用][42]
+[Servlet中的Filter过滤器的介绍和使用][50]
 
 
 过滤器是一个程序，它先于与之相关的servlet或JSP页面运行在服务器上。它能够对Servlet容器的请求和响应对象进行检查和修改。
@@ -521,8 +568,26 @@ public void doFilter(ServletRequest request, ServletResponse response,
 ### JSP原理
 
  1. JSP和Servlet的区别
+
+[Jsp 和 Servlet 的区别][51]
+* Servlet在Java代码中通过HttpServletResponse对象动态输出HTML内容
+* JSP在静态HTML内容中嵌入Java代码，Java代码被动态执行后生成HTML内容
+
+
  2. JSP的动态include和静态include
+
+[JSP动态包含与静态包含][52]
+
+动态INCLUDE用jsp:include动作实现它总是会检查所含文件中的变化，适合用于包含动态页面，并且可以带参数。静态INCLUDE用include伪码实现,定不会检查所含文件的变化，适用于包含静态页面
+
+因为执行的是 class,所以静态 include在编译为class的时候加入一起编译,动态include是分别编译为class,执行的时候动态引入
+
  3. Struts中请求处理过程
+ 4. JSP 页面中文乱码
+
+[JSP 中文乱码][53]
+
+
 
 ### MVC概念
 
@@ -539,6 +604,12 @@ public void doFilter(ServletRequest request, ServletResponse response,
  11. Spring事务的传播特性
  12. springmvc原理
  13. springmvc用过哪些注解
+
+[Java 注解][54]
+
+**注解**是插入你代码中的一种注释或者说是一种元数据（meta data）。这些注解信息可以在编译期使用预编译工具进行处理（pre-compiler tools），也可以在运行期使用 Java 反射机制进行处理。
+
+
  14. Restful有几种请求
  15. Restful好处
  16. Tomcat，Apache，JBoss的区别
@@ -570,6 +641,29 @@ public void doFilter(ServletRequest request, ServletResponse response,
  10. 给你一个数组，如何里面找到和为K的两个数？
  11. 100000个数找出最小或最大的10个？
  12. 一堆数字里面继续去重，要怎么处理？
+
+##  分布式
+
+1. zookeeper
+
+[ZooKeeper伪分布式集群安装及使用][55]
+
+[ZooKeeper学习第二期--ZooKeeper安装配置][56]
+
+**zookeeper 配置:**
+* tickTime=2000
+* initLimit=10
+* synclimit=5
+* dataDir=/home/hadoop/zoo
+* clientPort=2016  
+* server.1=192.168.1.109:2888:3888
+* server.2=192.168.1.130:2888:3888
+
+`clientPort` 端口,`server` 用于与 `client` 连接的端口号,`dataDir` 服务器的数据文件,`server.X` 和 `myid,server.X` 这个数字对应 `data/myid` 中的数字,3个 `server` 的 `myid` 文件分别写入 1,2,3,在 `zoo.cfg` 中配置 `server.1,server.2,server.X` 的 `ip:port:Xport,port` 用于 `server` 之间的连接,`Xport` 用于选举 `leader`.
+
+2. 
+
+
 
 ##  数据结构：
 
@@ -675,8 +769,22 @@ public void doFilter(ServletRequest request, ServletResponse response,
   [35]: http://blog.csdn.net/shimiso/article/details/8964414
   [36]: http://www.hollischuang.com/archives/1140
   [37]: http://www.infoq.com/cn/articles/serialization-and-deserialization
-  [38]: http://www.cnblogs.com/lanxuezaipiao/archive/2013/05/17/3082949.html
-  [39]: http://my.oschina.net/u/242764/blog/482685
-  [40]: http://www.cnblogs.com/CheeseZH/archive/2012/11/28/2791914.html
-  [41]: http://www.cnblogs.com/cuiliang/archive/2011/10/21/2220671.html
-  [42]: http://www.itzhai.com/java-web-notes-servlet-filters-in-the-filter-writing-the-introduction-and-use-of-filters.html#read-more
+  [38]: http://blog.csdn.net/buutterfly/article/details/6617375
+  [39]: http://www.cnblogs.com/lanxuezaipiao/archive/2013/05/17/3082949.html
+  [40]: http://my.oschina.net/u/242764/blog/482685
+  [41]: http://www.cnblogs.com/CheeseZH/archive/2012/11/28/2791914.html
+  [42]: http://cnn237111.blog.51cto.com/2359144/1131869
+  [43]: http://bliuqing.iteye.com/blog/374977
+  [44]: https://www.zhihu.com/question/20794107
+  [45]: http://www.oschina.net/question/271044_2155059
+  [46]: http://blog.csdn.net/mindfloating/article/details/39473807
+  [47]: http://blog.csdn.net/mindfloating/article/details/39474123
+  [48]: https://www.zhihu.com/question/48707169
+  [49]: http://www.cnblogs.com/cuiliang/archive/2011/10/21/2220671.html
+  [50]: http://www.itzhai.com/java-web-notes-servlet-filters-in-the-filter-writing-the-introduction-and-use-of-filters.html#read-more
+  [51]: https://www.zhihu.com/question/37962386
+  [52]: http://beijishiqidu.iteye.com/blog/1976142
+  [53]: https://www.zhihu.com/question/20212696
+  [54]: http://wiki.jikexueyuan.com/project/java-reflection/java-at.html
+  [55]: http://blog.fens.me/hadoop-zookeeper-intro/
+  [56]: http://www.cnblogs.com/sunddenly/p/4018459.html
