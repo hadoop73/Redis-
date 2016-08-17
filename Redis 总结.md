@@ -97,6 +97,31 @@ grammar_cjkRuby: true
 
 ### list
 
+![enter description here][26]
+
+**操作**
+
+![enter description here][27]
+
+![enter description here][28]
+
+![enter description here][29]
+
+![enter description here][30]
+
+![enter description here][31]
+
+![enter description here][32]
+
+![enter description here][33]
+
+![enter description here][34]
+
+![enter description here][35]
+
+
+
+
 ###  set
 
 
@@ -128,3 +153,13 @@ grammar_cjkRuby: true
   [23]: ./images/1471316968812.jpg "1471316968812.jpg"
   [24]: ./images/1471317017554.jpg "1471317017554.jpg"
   [25]: ./images/1471317083066.jpg "1471317083066.jpg"
+  [26]: ./images/1471318175501.jpg "1471318175501.jpg"
+  [27]: ./images/1471318344318.jpg "1471318344318.jpg"
+  [28]: ./images/1471318552635.jpg "1471318552635.jpg"
+  [29]: ./images/1471318700634.jpg "1471318700634.jpg"
+  [30]: ./images/1471318832642.jpg "1471318832642.jpg"
+  [31]: ./images/1471318920775.jpg "1471318920775.jpg"
+  [32]: ./images/1471319127761.jpg "1471319127761.jpg"
+  [33]: ./images/1471319153634.jpg "1471319153634.jpg"
+  [34]: ./images/1471319494005.jpg "1471319494005.jpg"
+  [35]: ./images/1471319592485.jpg "1471319592485.jpg"
