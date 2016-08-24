@@ -132,9 +132,9 @@ Java 中集合的泛型,防止错误输入,只在编译阶段有效
 
 ## Java基础：
 
- 1. 面向对象和面向过程的区别
+1. 面向对象和面向过程的区别
 - `面向过程是一件事“该怎么做“，面向对象是一件事“该让谁来做”，然后那个“谁”就是对象，他要怎么做是他自己的事，反正最后一群对象合力能把事做好就行了。`
- 2. Java的四个基本特性（抽象、封装、继承，多态）
+2. Java的四个基本特性（抽象、封装、继承，多态）
 
 [java的四个特性（抽象，封装，继承，多态），对多态使用方式的理解][7]
 
@@ -155,13 +155,14 @@ Java 中集合的泛型,防止错误输入,只在编译阶段有效
     多态：对不同子类型的对象对同一消息做出不同的回应。
 
 
- 4. Overload和Override的区别
+4. Overload和Override的区别
 
 [ Java中的继承、封装、多态、抽象][8]
 
 -    方法的重写Overriding和重载Overloading是Java多态性的不同表现。重写Overriding是父类与子类之间多态性的一种 表现，重载Overloading是一个类中多态性的一种表现。如果在子类中定义某方法与其父类有相同的名称和参数，我们说该方法被重写 (Overriding)。子类的对象使用这个方法时，将调用子类中的定义，对它而言，父类中的定义如同被“屏蔽”了。如果在一个类中定义了多个同名的方 法，它们或有不同的参数个数或有不同的参数类型，则称为方法的重载(Overloading)。Overloaded的方法是可以改变返回值的类型。方法的重写Overriding和重载Overloading是Java多态性的不同表现。
 
- 5. 构造器Constructor是否可被override
+5. 构造器Constructor是否可被override
+
 [ Java中的构造方法总结][9]
 
 **构造器不能被 Override**
@@ -178,7 +179,7 @@ Java 中集合的泛型,防止错误输入,只在编译阶段有效
 	* 5．子类的非静态对象（变量） 
 	* 6．子类的构造函数。 
 
- 6. 访问控制符public,protected,private,以及默认的区别
+6. 访问控制符public,protected,private,以及默认的区别
 
 |  修饰符  | 当前类   | 同包    | 子类    |其他包     |
 | :---: | :---: | :---: | :---: | :---: |
@@ -187,7 +188,7 @@ Java 中集合的泛型,防止错误输入,只在编译阶段有效
 |   default  |  √   |  √   |  ×   |   ×  |
 | private|√|×|×|×|
 
- 1. 是否可以继承String类
+1. 是否可以继承String类
  
  [Java String 源码浅析][10]
  [String 实现][11]
@@ -201,7 +202,7 @@ public final class String{
 ```
 为了**安全**不可变,在 `HashSet` 的 `Key` 里面,变动就出问题了
 
- 2. String和StringBuffer、StringBuilder的区别
+2. String和StringBuffer、StringBuilder的区别
 [java中String、StringBuffer、StringBuilder的区别][13]
 
 **可变性**
@@ -216,7 +217,7 @@ public final class String{
 
 
 
- 3. hashCode和equals方法的关系
+3. hashCode和equals方法的关系
 [hashCode与equals的区别与联系][15]
 * `equals` 方法用于比较对象
 * `hashcode` 用于集合中
@@ -230,20 +231,20 @@ public final class String{
 * == 判断是否为同一个对象,比对内存空间地址
 * `equals` 被覆写后,由程序控制,`String` 类比对的是内容是否相同
 
- 4. 抽象类和接口的区别
+4. 抽象类和接口的区别
 [接口和抽象类有什么区别][17]
 * 抽象类是对根源的抽象,接口是对动作的抽象,抽象一组动作,不同的类不同的实现
 * 接口中方法都是抽象的,不能实现,抽象类可以
 * 接口中可以由 `static` 类型数据,抽象类没有
 
- 5. 自动装箱与拆箱
+5. 自动装箱与拆箱
 [Java 自动装箱与拆箱(Autoboxing and unboxing)][18]
 * 自动装箱是由值构建对象,构建对象是为了使用类提供的方法
 * 拆箱是由对象返回值,能够很好的运算
 
 
 
- 1. 什么是泛型、为什么要使用以及泛型擦除
+1. 什么是泛型、为什么要使用以及泛型擦除
 
 [Java泛型的好处][19]
 * 类型安全:放入数据的时候,会进行类型检查,确保放入可接受的类型
@@ -262,7 +263,7 @@ public final class String{
 **类型检查**
 类型检查只针对引用
 
- 2. Java中的集合类及关系图
+2. Java中的集合类及关系图
 [Java 集合类图(转)][21]
 [Java 集合总结（Collection系列与Map系列）][22]
 
@@ -308,16 +309,17 @@ Set s = Collections.synchronizedSet(new HashSet(...));
 * ConcurrentHashMap:也是 HashMap 的线程安全版本,使用了分段加锁机制,效率比 HashTable 高.
 
 
- 3. HashMap实现原理(看源代码)
+3. HashMap实现原理(看源代码)
 
- 4. HashTable实现原理(看源代码)
- 5. HashMap和HashTable区别
- 6. HashTable如何实现线程安全(看源代码)
- 7. ArrayList和vector区别(看源代码)
- 8. ArrayList和LinkedList区别及使用场景
- 9. Collection和Collections的区别
- 10. Concurrenthashmap实现原理(看源代码)
- 11. Error、Exception区别
+4. HashTable实现原理(看源代码)
+5. HashMap和HashTable区别
+6. HashTable如何实现线程安全(看源代码)
+7. ArrayList和vector区别(看源代码)
+8. ArrayList和LinkedList区别及使用场景
+9. Collection和Collections的区别
+10. Concurrenthashmap实现原理(看源代码)
+11. Error、Exception区别
+
 [Java的Exception和Error面试题10问10答][29]
 
 Error 和 Exception 都继承自 Throwable,不同处如下:
@@ -334,7 +336,7 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 *  应该在应用程序级被处理
 
 
- 12. Unchecked Exception和Checked Exception，各列举几个
+12. Unchecked Exception和Checked Exception，各列举几个
 
 [Throwable、Error、Exception、RuntimeException 区别 联系][30]
 
@@ -343,15 +345,15 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 * Unchecked exception: 这类异常都是RuntimeException的子类，虽然RuntimeException同样也是Exception的子类，但是它们是非凡的，它们不能通过client code来试图解决，所以称为Unchecked exception 。
 
 
- 13. Java中如何实现代理机制(JDK、CGLIB)
- 14. 多线程的实现方式
- 15. 线程的状态转换
- 16. 如何停止一个线程
- 17. 什么是线程安全
+13. Java中如何实现代理机制(JDK、CGLIB)
+14. 多线程的实现方式
+15. 线程的状态转换
+16. 如何停止一个线程
+17. 什么是线程安全
 当多个线程访问某个类时,这个类始终都能够表现出正确的行为,就称这个类是线程安全的
 线程安全是编程中的术语，指某个函数、函数库在多线程环境中被调用时，能够正确地处理多个线程之间的共享变量，使程序功能正确完成。
 
- 18. 如何保证线程安全
+18. 如何保证线程安全
  19. Synchronized如何使用
 [Java 多线程：synchronized 关键字用法（修饰类，方法，静态方法，代码块）][31]
 
