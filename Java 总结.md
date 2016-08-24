@@ -43,6 +43,68 @@ Class cl = Manager.class;
  Object obj = Class.forName(s).newInstance();
 ```
 
+###  Class
+类也是对象,是 Class 类的实例对象,只有JVM能够创建
+这个对象称为类类型
+
+```java
+Class c1 = MyClass.class;
+Class c2 = myClass.getClass();
+Class c3 = Class.forName("...")
+```
+**通过类类型创建实例**
+```java
+// 无参数构造方法
+MyClass myClass = (MyClass)c1.newInstance();
+```
+编译时加载类是静态加载类,运行时加载类是动态加载类
+* new 创建对象是静态加载类,编译时加载所有类
+* Class.forName("...")
+
+**操作**
+
+```java
+
+Class c = myClass.getClass();
+// 获得所有public函数,包括父类继承而来
+// getDeclareMethods() 获取所有自己声明的方法,不管权限
+Method[] ms = c.getMethods();
+// 得到方法名称
+ms[0].getName();
+ms[0].getReturnType(); // 返回类型
+// 获取参数类型的类类型
+Class[] paramTypes = ms[0].getParameterTypes();
+// 获取类的所有信息
+Integer n = 1;
+ClassUtil.printClassMessage(n);
+
+
+// 成员变量也是对象
+Field[] fs = c.getFields(); // 所有public的成员变量信息
+Field[] f = c.getDeclareFields(); // 所有自己声明成员变量信息
+// 成员变量的类类型
+Class fType = f[0].getType();
+String typeName = fType.getName();
+// 成员变量名称
+String fieldName = f[0].getName();
+
+
+// 构造函数也是对象
+// getConstructors 获得所有 public 构造函数
+// getDeclareConstructors 获得所有构造函数
+COnstructor[] cs = c.getConstructors();
+```
+
+**方法的反射**
+* 方法的名称和方法的参数类型列表获取方法
+* method.invoke(obj,parameters) 调用
+
+
+###  泛型
+Java 中集合的泛型,防止错误输入,只在编译阶段有效
+
+
+
 ##  final 关键词
 
 [浅析Java中的final关键字][6]
@@ -197,6 +259,9 @@ public final class String{
 
 原始类型（raw type）就是擦除去了泛型信息，最后在字节码中的类型变量的真正类型。无论何时定义一个泛型类型，相应的原始类型都会被自动地提供。类型变量被擦除（crased），并使用其限定类型（无限定的变量用Object）替换。
 
+**类型检查**
+类型检查只针对引用
+
  2. Java中的集合类及关系图
 [Java 集合类图(转)][21]
 [Java 集合总结（Collection系列与Map系列）][22]
@@ -340,12 +405,10 @@ Runnable 和 Callable 描述的都是抽象的计算任务.Future 表示一个�
 
 CompletionService 将 Executor 和 BlockingQueue 的功能融合在一起,将 Callable 任务提交给它执行,使用类似队列操作的 take 和 poll 获得已经完成的封装成 Future 的结果.
 ```java
-CompletionService<ImageData> com = new ExecutorCompletionService<ImageData>(executor);
-Future<ImageData> f = com.take();
+CompletionService com = new ExecutorCompletionService(executor);
+Future f = com.take();
 ImageData imageData = f.get();
 ```
-
-
 
 
 
@@ -402,10 +465,16 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
  36. 用什么工具可以查出内存泄漏
  37. Java内存管理及回收算法
  38. Java类加载器及如何加载类(双亲委派)
+
+[深入理解和探究Java类加载机制----][39]
+
+根据一个指定的名称,找到或者生成对应的字节码,形成被虚拟机使用的Java类型
+
+
  39. xml解析方式
 
-[四种生成和解析XML文档的方法详解][39]
-[Java解析XML的四种方法][40]
+[四种生成和解析XML文档的方法详解][40]
+[Java解析XML的四种方法][41]
 
 **DOM/SAX/JDOM/DOM4J**
 * DOM
@@ -426,7 +495,7 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
 	* 支持XPath,性能好
 	* 大量使用接口,API复杂
 
-[Dom4j解析XML学习代码][41]
+[Dom4j解析XML学习代码][42]
 ```java
 /*建立document对象*/
 Document document = DocumentHelper.createDocument();
@@ -447,14 +516,34 @@ titleElement.setText("Dom4j Tutorials");
 
  40. Statement和PreparedStatement之间的区别
 
-[Java笔记：Statement和PreparedStatement的区别][42]
-[【转】PreparedStatement和Statement区别][43]
+[Java笔记：Statement和PreparedStatement的区别][43]
+[【转】PreparedStatement和Statement区别][44]
 
 数据库会对 PreparedStatement 数据库进行预编译,下次相同的 sql 语句时,数据库端不会再进行预编译,而直接用数据库的缓冲区(使用了?),提高数据访问的效率
 
  41. 动态代理
 
-[Java 动态代理作用是什么？][44]
+[几种动态代理方法][45]
+
+[Java 动态代理作用是什么？][46]
+
+通过使用 `Proxy.newProxyInstance()` 创建动态代理,所需三个参数:
+* 类加载器,用来生成一个动态类,可以用生成的动态类获得实例
+* 接口数组,被代理类实现的接口
+* InvocationHandler 实例,所有的方法调用都会转到这个接口实现的 invoke() 方法
+
+```java
+InvocationHandler handler = new MyInvocationHandler();
+MyInterface proxy = (MyInterface) Proxy.newProxyInstance(
+                            MyInterface.class.getClassLoader(),
+                            new Class[] { MyInterface.class },
+                            handler);
+
+public interface InvocationHandler{
+  Object invoke(Object proxy, Method method, Object[] args)
+         throws Throwable;
+}
+```
 
 静态代理:如果类方法数量越来越多的时候，代理类的代码量是十分庞大的
 
@@ -465,21 +554,34 @@ titleElement.setText("Dom4j Tutorials");
 
  42. RPC
 
-[为什么需要RPC，而不是简单的HTTP接口][45]
-[ 深入浅出 RPC - 浅出篇][46]
-[深入浅出 RPC - 深入篇][47]
+[为什么需要RPC，而不是简单的HTTP接口][47]
+[ 深入浅出 RPC - 浅出篇][48]
+[深入浅出 RPC - 深入篇][49]
 
 远程过程调用属于长连接
 
  43. 枚举
 
-[Java 枚举会比静态常量更消耗内存吗？][48]
+[Java 枚举会比静态常量更消耗内存吗？][50]
 
 枚举的实现原理,就是定义了一个类,实例化final修饰的元素,每个实例都有自己的元信息.比自己定义的常量耗内存,但是枚举可读性,扩展性更好
 
- 44. 
+ 44. CountDownLatch
 
- 45. 
+[Java CountDownLatch应用][51]
+
+原子操作的计数器,如果一个线程调用 CountDownLatch 实例 await() 方法,则必须等到实例通过 countDown() 方法减一,计数为0才能继续执行
+
+ 45. logback
+
+[logback 常用配置详解（序）logback 简介][52]
+
+
+
+
+ 46. 
+
+
 
 
 
@@ -491,7 +593,7 @@ titleElement.setText("Dom4j Tutorials");
 
 1. servlet生命周期及各个方法
 
-[Servlet生命周期与工作原理][49]
+[Servlet生命周期与工作原理][53]
 
 Servlet 生命周期分为三个阶段:
 * 初始化阶段  调用init()方法
@@ -506,7 +608,7 @@ Servlet 容器启动时自动装载 Servlet,创建一个 Servlet 实例并且调
 
 2. servlet中如何自定义filter
 
-[Servlet中的Filter过滤器的介绍和使用][50]
+[Servlet中的Filter过滤器的介绍和使用][54]
 
 
 过滤器是一个程序，它先于与之相关的servlet或JSP页面运行在服务器上。它能够对Servlet容器的请求和响应对象进行检查和修改。
@@ -526,14 +628,14 @@ doFilter():完成过滤功能
 destroy():Servlet容器销毁过滤器实例前调用该方法,释放Servlet过滤器占用的资源.
 
 ```xml
-<filter>
-      <filter-name>LoginFilter</filter-name>
-      <filter-class>com.itzhai.login.LoginFilter</filter-class>
-      <init-param>
-          <param-name>username</param-name>
-          <param-value>arthinking</param-value>
-      </init-param>
-  </filter>
+
+      LoginFilter
+      com.itzhai.login.LoginFilter
+      
+          username
+          arthinking
+      
+  
 ```
 
 ```java
@@ -569,14 +671,14 @@ public void doFilter(ServletRequest request, ServletResponse response,
 
  1. JSP和Servlet的区别
 
-[Jsp 和 Servlet 的区别][51]
+[Jsp 和 Servlet 的区别][55]
 * Servlet在Java代码中通过HttpServletResponse对象动态输出HTML内容
 * JSP在静态HTML内容中嵌入Java代码，Java代码被动态执行后生成HTML内容
 
 
  2. JSP的动态include和静态include
 
-[JSP动态包含与静态包含][52]
+[JSP动态包含与静态包含][56]
 
 动态INCLUDE用jsp:include动作实现它总是会检查所含文件中的变化，适合用于包含动态页面，并且可以带参数。静态INCLUDE用include伪码实现,定不会检查所含文件的变化，适用于包含静态页面
 
@@ -585,7 +687,7 @@ public void doFilter(ServletRequest request, ServletResponse response,
  3. Struts中请求处理过程
  4. JSP 页面中文乱码
 
-[JSP 中文乱码][53]
+[JSP 中文乱码][57]
 
 
 
@@ -605,7 +707,7 @@ public void doFilter(ServletRequest request, ServletResponse response,
  12. springmvc原理
  13. springmvc用过哪些注解
 
-[Java 注解][54]
+[Java 注解][58]
 
 **注解**是插入你代码中的一种注释或者说是一种元数据（meta data）。这些注解信息可以在编译期使用预编译工具进行处理（pre-compiler tools），也可以在运行期使用 Java 反射机制进行处理。
 
@@ -646,9 +748,16 @@ public void doFilter(ServletRequest request, ServletResponse response,
 
 1. zookeeper
 
-[ZooKeeper伪分布式集群安装及使用][55]
+[Zookeeper与paxos算法][59]
 
-[ZooKeeper学习第二期--ZooKeeper安装配置][56]
+[ZooKeeper编程(一)][60]
+
+[ZooKeeper伪分布式集群安装及使用][61]
+
+[ZooKeeper学习第二期--ZooKeeper安装配置][62]
+
+**zookeeper 功能**
+zookeeper 提供了一个同步的文件系统和通知机制
 
 **zookeeper 配置:**
 * tickTime=2000
@@ -708,6 +817,20 @@ public void doFilter(ServletRequest request, ServletResponse response,
  9. redirect与forward区别
  10. DNS
  11. TCP和UDP区别
+
+
+##  Maven
+
+1. 模块划分
+
+[Maven最佳实践：划分模块][63]
+
+父模块需要设置 `<packaging>,<modules>`
+子模块只需要设置 artifcatId
+
+3. 
+
+
 
 ##  安全：
 
@@ -770,21 +893,28 @@ public void doFilter(ServletRequest request, ServletResponse response,
   [36]: http://www.hollischuang.com/archives/1140
   [37]: http://www.infoq.com/cn/articles/serialization-and-deserialization
   [38]: http://blog.csdn.net/buutterfly/article/details/6617375
-  [39]: http://www.cnblogs.com/lanxuezaipiao/archive/2013/05/17/3082949.html
-  [40]: http://my.oschina.net/u/242764/blog/482685
-  [41]: http://www.cnblogs.com/CheeseZH/archive/2012/11/28/2791914.html
-  [42]: http://cnn237111.blog.51cto.com/2359144/1131869
-  [43]: http://bliuqing.iteye.com/blog/374977
-  [44]: https://www.zhihu.com/question/20794107
-  [45]: http://www.oschina.net/question/271044_2155059
-  [46]: http://blog.csdn.net/mindfloating/article/details/39473807
-  [47]: http://blog.csdn.net/mindfloating/article/details/39474123
-  [48]: https://www.zhihu.com/question/48707169
-  [49]: http://www.cnblogs.com/cuiliang/archive/2011/10/21/2220671.html
-  [50]: http://www.itzhai.com/java-web-notes-servlet-filters-in-the-filter-writing-the-introduction-and-use-of-filters.html#read-more
-  [51]: https://www.zhihu.com/question/37962386
-  [52]: http://beijishiqidu.iteye.com/blog/1976142
-  [53]: https://www.zhihu.com/question/20212696
-  [54]: http://wiki.jikexueyuan.com/project/java-reflection/java-at.html
-  [55]: http://blog.fens.me/hadoop-zookeeper-intro/
-  [56]: http://www.cnblogs.com/sunddenly/p/4018459.html
+  [39]: http://www.cnblogs.com/sunniest/p/4574080.html
+  [40]: http://www.cnblogs.com/lanxuezaipiao/archive/2013/05/17/3082949.html
+  [41]: http://my.oschina.net/u/242764/blog/482685
+  [42]: http://www.cnblogs.com/CheeseZH/archive/2012/11/28/2791914.html
+  [43]: http://cnn237111.blog.51cto.com/2359144/1131869
+  [44]: http://bliuqing.iteye.com/blog/374977
+  [45]: http://blog.csdn.net/centre10/article/details/6847828
+  [46]: https://www.zhihu.com/question/20794107
+  [47]: http://www.oschina.net/question/271044_2155059
+  [48]: http://blog.csdn.net/mindfloating/article/details/39473807
+  [49]: http://blog.csdn.net/mindfloating/article/details/39474123
+  [50]: https://www.zhihu.com/question/48707169
+  [51]: http://zapldy.iteye.com/blog/746458
+  [52]: http://aub.iteye.com/blog/1101222
+  [53]: http://www.cnblogs.com/cuiliang/archive/2011/10/21/2220671.html
+  [54]: http://www.itzhai.com/java-web-notes-servlet-filters-in-the-filter-writing-the-introduction-and-use-of-filters.html#read-more
+  [55]: https://www.zhihu.com/question/37962386
+  [56]: http://beijishiqidu.iteye.com/blog/1976142
+  [57]: https://www.zhihu.com/question/20212696
+  [58]: http://wiki.jikexueyuan.com/project/java-reflection/java-at.html
+  [59]: http://blog.jobbole.com/45721/
+  [60]: http://www.cnblogs.com/zhangchaoyang/articles/2536178.html%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00
+  [61]: http://blog.fens.me/hadoop-zookeeper-intro/
+  [62]: http://www.cnblogs.com/sunddenly/p/4018459.html
+  [63]: http://juvenshun.iteye.com/blog/305865
