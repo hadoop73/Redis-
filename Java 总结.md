@@ -278,6 +278,7 @@ Set,List 和 Map用途
 * Map 集合保存　Key-Value 键值对,通过 Key 来访问 Value
 
 **List**
+
 [Java 集合：Collection，List，ArrayList，Vector，LinkedList（实现方式，对比）][25]
 
 * ArrayList 基于数组非线程安全.添加元素会先进行容量越界判定,必要时扩容
