@@ -28,9 +28,8 @@ $ echo 'Welcome to Bash' # 不会对变量($var)求值
 
 ![enter description here][2]
 
-**`%s、%c、%d` 和`%f` 都是格式替代符，对应的参数可以放在带引号的格式符字符串之后。
+**`%s、%c、%d` 和`%f` 都是格式替代符**，对应的参数可以放在带引号的格式符字符串之后。
 
-![enter description here][3]
 
 **在`echo` 中转移换行符**
 `echo` 默认会将一个换行符输出到文本尾部，可以用标志`-n` 来忽略结尾的换行符。`echo` 接受双引号字符串内的转义序列作为参数。采用`echo -e 包含转义序列的字符串`。
@@ -144,7 +143,7 @@ cat <<EOF>>log.txt
 LOG FILE HEADER
 This is a test content.
 ```
-在`cat <<EOF>>log.txt` 与下一个`EOF` 行之间的所有文本行被当做`stdin` 数据被输入到`log.txt`。
+在`cat <>log.txt` 与下一个`EOF` 行之间的所有文本行被当做`stdin` 数据被输入到`log.txt`。
 
 自定义文件描述符
 ```bash
@@ -313,22 +312,6 @@ done
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  [1]: ./images/1458825920112.jpg "1458825920112.jpg"
-  [2]: ./images/1458826692242.jpg "1458826692242.jpg"
+  [1]: ./images/1472458041145.jpg "1472458041145.jpg"
+  [2]: ./images/1472458173331.jpg "1472458173331.jpg"
   [3]: ./images/1458826908061.jpg "1458826908061.jpg"
