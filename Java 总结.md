@@ -333,14 +333,14 @@ Set s = Collections.synchronizedSet(new HashSet(...));
 
 3. HashMap实现原理(看源代码)
 
- 4. HashTable实现原理(看源代码)
- 5. HashMap和HashTable区别
- 6. HashTable如何实现线程安全(看源代码)
- 7. ArrayList和vector区别(看源代码)
- 8. ArrayList和LinkedList区别及使用场景
- 9. Collection和Collections的区别
- 10. Concurrenthashmap实现原理(看源代码)
- 11. Error、Exception区别
+4. HashTable实现原理(看源代码)
+5. HashMap和HashTable区别
+6. HashTable如何实现线程安全(看源代码)
+7. ArrayList和vector区别(看源代码)
+8. ArrayList和LinkedList区别及使用场景
+9. Collection和Collections的区别
+10. Concurrenthashmap实现原理(看源代码)
+11. Error、Exception区别
 
 [Java的Exception和Error面试题10问10答][29]
 
