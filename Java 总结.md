@@ -330,7 +330,8 @@ Set s = Collections.synchronizedSet(new HashSet(...));
 * ConcurrentHashMap:也是 HashMap 的线程安全版本,使用了分段加锁机制,效率比 HashTable 高.
 
 
- 3. HashMap实现原理(看源代码)
+
+3. HashMap实现原理(看源代码)
 
  4. HashTable实现原理(看源代码)
  5. HashMap和HashTable区别
@@ -359,7 +360,7 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 *  应该在应用程序级被处理
 
 
- 12. Unchecked Exception和Checked Exception，各列举几个
+12. Unchecked Exception和Checked Exception，各列举几个
 
 [Throwable、Error、Exception、RuntimeException 区别 联系][30]
 
