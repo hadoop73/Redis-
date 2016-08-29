@@ -191,8 +191,11 @@ Java 中集合的泛型,防止错误输入,只在编译阶段有效
  1. 是否可以继承String类
  
  [Java String 源码浅析][10]
+ 
  [String 实现][11]
+ 
  [在java中String类为什么要设计成final][12]
+ 
 `String` 是 final 修饰不能够继承
 ```java
 public final class String{
@@ -203,42 +206,54 @@ public final class String{
 为了**安全**不可变,在 `HashSet` 的 `Key` 里面,变动就出问题了
 
  2. String和StringBuffer、StringBuilder的区别
+
 [java中String、StringBuffer、StringBuilder的区别][13]
 
 **可变性**
+
 `String` 不可变,`StringBuffer` 和 `StringBuilder` 可变
 
 **线程安全性**
 `String` 和 `StingBuffer` 是线程安全的
 
 **原理**
+
 [Java StringBuilder和StringBuffer源码分析][14]
+
 `StringBuffer` 和 `StringBuilder` 都是调用抽象父类 `AbstractStringBuilder` 的实现而已,不同之处在于 `StringBuffer` 加了同步关键词 `synchronized
 
 
 
  3. hashCode和equals方法的关系
+
 [hashCode与equals的区别与联系][15]
+
 * `equals` 方法用于比较对象
 * `hashcode` 用于集合中
 * 将对象放入到集合中时，首先判断要放入对象的hashcode值与集合中的任意一个元素的hashcode值是否相等，如果不相等直接将该对象放入集合中。如果hashcode值相等，然后再通过equals方法判断要放入对象与集合中的任意一个对象是否相等，如果equals判断不相等，直接将该元素放入到集合中，否则不放入。
 
 [ java中的hashCode()和equals()的关系][16]
+
 * 重写 `equals`,判断 `HashSet` 中元素不会重复
 * 重写 `hashCode` 提高 `HashMap` 比对性能
 
 **`==` 和 `equals` 的区别**
+
 * == 判断是否为同一个对象,比对内存空间地址
 * `equals` 被覆写后,由程序控制,`String` 类比对的是内容是否相同
 
  4. 抽象类和接口的区别
+
 [接口和抽象类有什么区别][17]
+
 * 抽象类是对根源的抽象,接口是对动作的抽象,抽象一组动作,不同的类不同的实现
 * 接口中方法都是抽象的,不能实现,抽象类可以
 * 接口中可以由 `static` 类型数据,抽象类没有
 
  5. 自动装箱与拆箱
+
 [Java 自动装箱与拆箱(Autoboxing and unboxing)][18]
+
 * 自动装箱是由值构建对象,构建对象是为了使用类提供的方法
 * 拆箱是由对象返回值,能够很好的运算
 
@@ -264,7 +279,9 @@ public final class String{
 类型检查只针对引用
 
  2. Java中的集合类及关系图
+
 [Java 集合类图(转)][21]
+
 [Java 集合总结（Collection系列与Map系列）][22]
 
 Java 结合类的两个接口:Collection 和 Map,它们包含了一些其他接口(Iterator接口)
@@ -291,13 +308,17 @@ elementData = Arrays.copyOf(elementData, newCapacity);
 * LinkedList 基于链表实现,非线程安全.
 
 **Set**
+
 [Java集合总结汇总(链接)][26]
+
 Set 中元素实现了一个有效的 equals(Object) 方法
 HashSet 由哈希表支持,但不是同步的,可以通过以下语句实现同步转换
 ```java
 Set s = Collections.synchronizedSet(new HashSet(...));
 ```
+
 **Map**
+
 [Java 集合总结（Collection系列与Map系列）][27]
 
 ![enter description here][28]
@@ -326,11 +347,13 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 
 
 **Error**
+
 * 总是不可控
 * 经常用来表示系统错误或底层资源错误
 * 应该在系统级被捕捉
 
 **Exception**
+
 *  可以是可控(checked)或不可控的(unchecked)
 *  表示一个由程序员导致的错误
 *  应该在应用程序级被处理
@@ -355,6 +378,7 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 
  18. 如何保证线程安全
  19. Synchronized如何使用
+
 [Java 多线程：synchronized 关键字用法（修饰类，方法，静态方法，代码块）][31]
 
 * 修饰一个类，其作用的范围是synchronized后面括号括起来的部分，作用的对象是这个类的所有对象。
@@ -364,8 +388,11 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 
 
  20. synchronized和Lock的区别
+
 [Java 多线程：Lock接口（接口方法分析，ReentrantLock，ReadWriteLock）][32]
+
 [synchronized与lock的区别][33]
+
 * synchronize:效率低,使用更简单
 * Lock:更加细粒度,复杂,适合 synchronize 场景,不会自动释放锁,获取锁的过程可以被中断 interrupt()
 
@@ -373,6 +400,7 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
  21. 多线程如何进行信息交互
  22. sleep和wait的区别(考察的方向是是否会释放锁)
  23. 多线程与死锁
+
 [死锁][34]
 
  24. 如何才能产生死锁
@@ -380,6 +408,7 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 加锁机制能确保线程安全,但过度使用加锁,可能导致锁顺序死锁;我们使用线程池和信号量来限制资源的使用,可能会导致资源死锁
 
  25. 什么叫守护线程，用什么方法实现守护线程
+
 [Java中守护线程的总结][35]
 
 JVM 停止,守护线程会依旧运行,如果守护线程的资源没清理将会泄露,如垃圾回收器以及其他辅助工作的线程. 
@@ -417,6 +446,7 @@ ImageData imageData = f.get();
 
  27. java并发包concurrent及常用的类
  28. volatile关键字
+
 volatile 变量不会被缓存在寄存器或其他处理器看不见的地方,因此读取 volatile 类型的变量总会返回最新写入值.通常用作某个操作完成,发生中断或者状态的标志.满足下面条件才使用:
 * 对变量的写入操作不依赖变量的当前值
 * 变量不会与其他状态变量一起纳入不变性条件
@@ -477,9 +507,11 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
  39. xml解析方式
 
 [四种生成和解析XML文档的方法详解][40]
+
 [Java解析XML的四种方法][41]
 
 **DOM/SAX/JDOM/DOM4J**
+
 * DOM
 	* 允许应用程序对数据和结构做出修改
 	* 可以在任何时候在树中获取数据
@@ -499,6 +531,7 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
 	* 大量使用接口,API复杂
 
 [Dom4j解析XML学习代码][42]
+
 ```java
 /*建立document对象*/
 Document document = DocumentHelper.createDocument();
@@ -520,6 +553,7 @@ titleElement.setText("Dom4j Tutorials");
  40. Statement和PreparedStatement之间的区别
 
 [Java笔记：Statement和PreparedStatement的区别][43]
+
 [【转】PreparedStatement和Statement区别][44]
 
 数据库会对 PreparedStatement 数据库进行预编译,下次相同的 sql 语句时,数据库端不会再进行预编译,而直接用数据库的缓冲区(使用了?),提高数据访问的效率
@@ -558,7 +592,9 @@ public interface InvocationHandler{
  42. RPC
 
 [为什么需要RPC，而不是简单的HTTP接口][47]
+
 [ 深入浅出 RPC - 浅出篇][48]
+
 [深入浅出 RPC - 深入篇][49]
 
 远程过程调用属于长连接
@@ -599,6 +635,7 @@ public interface InvocationHandler{
 [Servlet生命周期与工作原理][53]
 
 Servlet 生命周期分为三个阶段:
+
 * 初始化阶段  调用init()方法
 
 * 响应客户请求阶段　　调用service()方法
@@ -650,6 +687,7 @@ public void init(FilterConfig filterConfig) throws ServletException {
 ````
 
 **过滤敏感词汇**
+
 ```java
 @Override
 public void doFilter(ServletRequest request, ServletResponse response,
@@ -675,6 +713,7 @@ public void doFilter(ServletRequest request, ServletResponse response,
  1. JSP和Servlet的区别
 
 [Jsp 和 Servlet 的区别][55]
+
 * Servlet在Java代码中通过HttpServletResponse对象动态输出HTML内容
 * JSP在静态HTML内容中嵌入Java代码，Java代码被动态执行后生成HTML内容
 
@@ -760,6 +799,7 @@ public void doFilter(ServletRequest request, ServletResponse response,
 [ZooKeeper学习第二期--ZooKeeper安装配置][62]
 
 **zookeeper 功能**
+
 zookeeper 提供了一个同步的文件系统和通知机制
 
 **zookeeper 配置:**
