@@ -132,9 +132,10 @@ Java 中集合的泛型,防止错误输入,只在编译阶段有效
 
 ## Java基础：
 
- 1. 面向对象和面向过程的区别
+1. 面向对象和面向过程的区别
 - `面向过程是一件事“该怎么做“，面向对象是一件事“该让谁来做”，然后那个“谁”就是对象，他要怎么做是他自己的事，反正最后一群对象合力能把事做好就行了。`
- 2. Java的四个基本特性（抽象、封装、继承，多态）
+
+2. Java的四个基本特性（抽象、封装、继承，多态）
 
 [java的四个特性（抽象，封装，继承，多态），对多态使用方式的理解][7]
 
@@ -155,13 +156,13 @@ Java 中集合的泛型,防止错误输入,只在编译阶段有效
     多态：对不同子类型的对象对同一消息做出不同的回应。
 
 
- 4. Overload和Override的区别
+4. Overload和Override的区别
 
 [ Java中的继承、封装、多态、抽象][8]
 
 -    方法的重写Overriding和重载Overloading是Java多态性的不同表现。重写Overriding是父类与子类之间多态性的一种 表现，重载Overloading是一个类中多态性的一种表现。如果在子类中定义某方法与其父类有相同的名称和参数，我们说该方法被重写 (Overriding)。子类的对象使用这个方法时，将调用子类中的定义，对它而言，父类中的定义如同被“屏蔽”了。如果在一个类中定义了多个同名的方 法，它们或有不同的参数个数或有不同的参数类型，则称为方法的重载(Overloading)。Overloaded的方法是可以改变返回值的类型。方法的重写Overriding和重载Overloading是Java多态性的不同表现。
 
- 5. 构造器Constructor是否可被override
+5. 构造器Constructor是否可被override
 
 [ Java中的构造方法总结][9]
 
@@ -179,7 +180,7 @@ Java 中集合的泛型,防止错误输入,只在编译阶段有效
 	* 5．子类的非静态对象（变量） 
 	* 6．子类的构造函数。 
 
- 6. 访问控制符public,protected,private,以及默认的区别
+6. 访问控制符public,protected,private,以及默认的区别
 
 |  修饰符  | 当前类   | 同包    | 子类    |其他包     |
 | :---: | :---: | :---: | :---: | :---: |
@@ -188,7 +189,7 @@ Java 中集合的泛型,防止错误输入,只在编译阶段有效
 |   default  |  √   |  √   |  ×   |   ×  |
 | private|√|×|×|×|
 
- 1. 是否可以继承String类
+1. 是否可以继承String类
  
  [Java String 源码浅析][10]
  
@@ -205,7 +206,7 @@ public final class String{
 ```
 为了**安全**不可变,在 `HashSet` 的 `Key` 里面,变动就出问题了
 
- 2. String和StringBuffer、StringBuilder的区别
+2. String和StringBuffer、StringBuilder的区别
 
 [java中String、StringBuffer、StringBuilder的区别][13]
 
@@ -224,7 +225,7 @@ public final class String{
 
 
 
- 3. hashCode和equals方法的关系
+3. hashCode和equals方法的关系
 
 [hashCode与equals的区别与联系][15]
 
@@ -242,7 +243,7 @@ public final class String{
 * == 判断是否为同一个对象,比对内存空间地址
 * `equals` 被覆写后,由程序控制,`String` 类比对的是内容是否相同
 
- 4. 抽象类和接口的区别
+4. 抽象类和接口的区别
 
 [接口和抽象类有什么区别][17]
 
@@ -250,7 +251,7 @@ public final class String{
 * 接口中方法都是抽象的,不能实现,抽象类可以
 * 接口中可以由 `static` 类型数据,抽象类没有
 
- 5. 自动装箱与拆箱
+5. 自动装箱与拆箱
 
 [Java 自动装箱与拆箱(Autoboxing and unboxing)][18]
 
@@ -337,12 +338,25 @@ Set s = Collections.synchronizedSet(new HashSet(...));
 5. HashMap和HashTable区别
 6. HashTable如何实现线程安全(看源代码)
 7. ArrayList和vector区别(看源代码)
+
+[Java 集合系列03之 ArrayList详细介绍(源码解析)和使用示例][29]
+
+ArrayList包含了两个重要的对象：elementData 和 size。
+
+(01) elementData 是"Object[]类型的数组"，它保存了添加到ArrayList中的元素。实际上，elementData是个动态数组，我们能通过构造函数 ArrayList(int initialCapacity)来执行它的初始容量为initialCapacity；如果通过不含参数的构造函数ArrayList()来创建ArrayList，则elementData的容量默认是10。elementData数组的大小会根据ArrayList容量的增长而动态的增长，具体的增长方式，请参考源码分析中的ensureCapacity()函数。
+
+(02) size 则是动态数组的实际大小。
+
+ArrayList 是动态数组,容量动态增长
+
+Vector 静态数组,线程安全的
+
 8. ArrayList和LinkedList区别及使用场景
 9. Collection和Collections的区别
 10. Concurrenthashmap实现原理(看源代码)
 11. Error、Exception区别
 
-[Java的Exception和Error面试题10问10答][29]
+[Java的Exception和Error面试题10问10答][30]
 
 Error 和 Exception 都继承自 Throwable,不同处如下:
 
@@ -362,25 +376,30 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 
 12. Unchecked Exception和Checked Exception，各列举几个
 
-[Throwable、Error、Exception、RuntimeException 区别 联系][30]
+[Throwable、Error、Exception、RuntimeException 区别 联系][31]
 
 * Checked exception: 这类异常都是Exception的子类 。异常的向上抛出机制进行处理，假如子类可能产生A异常，那么在父类中也必须throws A异常。可能导致的问题：代码效率低，耦合度过高。
 　　
 * Unchecked exception: 这类异常都是RuntimeException的子类，虽然RuntimeException同样也是Exception的子类，但是它们是非凡的，它们不能通过client code来试图解决，所以称为Unchecked exception 。
 
 
- 13. Java中如何实现代理机制(JDK、CGLIB)
- 14. 多线程的实现方式
- 15. 线程的状态转换
- 16. 如何停止一个线程
- 17. 什么是线程安全
+13. Java中如何实现代理机制(JDK、CGLIB)
+14. 多线程的实现方式
+
+Runnable 方式可以避免 Thread 方式由于 Java 单继承特性带来的缺陷
+
+Runnable 可以被多个线程共享,适合于多个线程处理同一资源的情况
+
+15. 线程的状态转换
+16. 如何停止一个线程
+17. 什么是线程安全
 当多个线程访问某个类时,这个类始终都能够表现出正确的行为,就称这个类是线程安全的
 线程安全是编程中的术语，指某个函数、函数库在多线程环境中被调用时，能够正确地处理多个线程之间的共享变量，使程序功能正确完成。
 
  18. 如何保证线程安全
  19. Synchronized如何使用
 
-[Java 多线程：synchronized 关键字用法（修饰类，方法，静态方法，代码块）][31]
+[Java 多线程：synchronized 关键字用法（修饰类，方法，静态方法，代码块）][32]
 
 * 修饰一个类，其作用的范围是synchronized后面括号括起来的部分，作用的对象是这个类的所有对象。
 * 修饰一个方法，被修饰的方法称为同步方法，其作用的范围是整个方法，作用的对象是调用这个方法的对象； 
@@ -390,9 +409,9 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 
  20. synchronized和Lock的区别
 
-[Java 多线程：Lock接口（接口方法分析，ReentrantLock，ReadWriteLock）][32]
+[Java 多线程：Lock接口（接口方法分析，ReentrantLock，ReadWriteLock）][33]
 
-[synchronized与lock的区别][33]
+[synchronized与lock的区别][34]
 
 * synchronize:效率低,使用更简单
 * Lock:更加细粒度,复杂,适合 synchronize 场景,不会自动释放锁,获取锁的过程可以被中断 interrupt()
@@ -402,7 +421,7 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
  22. sleep和wait的区别(考察的方向是是否会释放锁)
  23. 多线程与死锁
 
-[死锁][34]
+[死锁][35]
 
  24. 如何才能产生死锁
 
@@ -410,7 +429,7 @@ Error 和 Exception 都继承自 Throwable,不同处如下:
 
  25. 什么叫守护线程，用什么方法实现守护线程
 
-[Java中守护线程的总结][35]
+[Java中守护线程的总结][36]
 
 JVM 停止,守护线程会依旧运行,如果守护线程的资源没清理将会泄露,如垃圾回收器以及其他辅助工作的线程. 
 
@@ -453,11 +472,20 @@ volatile 变量不会被缓存在寄存器或其他处理器看不见的地方,�
 * 变量不会与其他状态变量一起纳入不变性条件
 * 访问变量时不需要加锁
 
- 29. Java中的NIO，BIO，AIO分别是什么
- 30. IO和NIO区别
- 31. 序列化与反序列化
+29. Java中的NIO，BIO，AIO分别是什么
 
-[深入分析Java的序列化与反序列化][36]
+[聊聊阻塞与非阻塞、同步与异步、I/O模型][37]
+
+[怎样理解阻塞非阻塞与同步异步的区别？][38]
+
+
+30. IO和NIO区别
+
+[NIO 入门][39]
+
+31. 序列化与反序列化
+
+[深入分析Java的序列化与反序列化][40]
 
 * 序列化： 将数据结构或对象转换成二进制串的过程。
 * 反序列化：将在序列化过程中所生成的二进制串转换成数据结构或者对象的过程。
@@ -472,7 +500,7 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
 
  32. 常见的序列化协议有哪些
 
-[序列化和反序列化][37]
+[序列化和反序列化][41]
 
 * XML:跨机器,跨语言.缺点:冗长复杂
 * SOAP:基于XML为序列化和反序列化协议的结构化消息传递协议.
@@ -488,28 +516,42 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
 
  33. 内存溢出和内存泄漏的区别
 
-[内存溢出和内存泄漏的区别][38]
+[内存溢出和内存泄漏的区别][42]
 
 * 内存溢出:使用的内存超出系统提供的容量,出现内存溢出
 * 内存泄露:申请后,无法正常释放,因此内存得不到正常回收使用,出现泄露
 
 
- 34. Java内存模型及各个区域的OOM，如何重现OOM
- 35. 出现OOM如何解决
- 36. 用什么工具可以查出内存泄漏
- 37. Java内存管理及回收算法
- 38. Java类加载器及如何加载类(双亲委派)
+34. Java内存模型及各个区域的OOM，如何重现OOM
 
-[深入理解和探究Java类加载机制----][39]
+
+
+35. 出现OOM如何解决
+
+[Java 内存溢出（java.lang.OutOfMemoryError）的常见情况和处理方式总结][43]
+
+36. 用什么工具可以查出内存泄漏
+
+[Java的内存泄漏][44]
+
+[enter description here][45]
+
+37. Java内存管理及回收算法
+ 
+
+
+38. Java类加载器及如何加载类(双亲委派)
+
+[深入理解和探究Java类加载机制----][46]
 
 根据一个指定的名称,找到或者生成对应的字节码,形成被虚拟机使用的Java类型
 
 
  39. xml解析方式
 
-[四种生成和解析XML文档的方法详解][40]
+[四种生成和解析XML文档的方法详解][47]
 
-[Java解析XML的四种方法][41]
+[Java解析XML的四种方法][48]
 
 **DOM/SAX/JDOM/DOM4J**
 
@@ -531,7 +573,7 @@ ArrayList 自己实现了 `readObject` 和 `writeObject`,自定义了序列化�
 	* 支持XPath,性能好
 	* 大量使用接口,API复杂
 
-[Dom4j解析XML学习代码][42]
+[Dom4j解析XML学习代码][49]
 
 ```java
 /*建立document对象*/
@@ -553,17 +595,17 @@ titleElement.setText("Dom4j Tutorials");
 
  40. Statement和PreparedStatement之间的区别
 
-[Java笔记：Statement和PreparedStatement的区别][43]
+[Java笔记：Statement和PreparedStatement的区别][50]
 
-[【转】PreparedStatement和Statement区别][44]
+[【转】PreparedStatement和Statement区别][51]
 
 数据库会对 PreparedStatement 数据库进行预编译,下次相同的 sql 语句时,数据库端不会再进行预编译,而直接用数据库的缓冲区(使用了?),提高数据访问的效率
 
  41. 动态代理
 
-[几种动态代理方法][45]
+[几种动态代理方法][52]
 
-[Java 动态代理作用是什么？][46]
+[Java 动态代理作用是什么？][53]
 
 通过使用 `Proxy.newProxyInstance()` 创建动态代理,所需三个参数:
 * 类加载器,用来生成一个动态类,可以用生成的动态类获得实例
@@ -592,34 +634,63 @@ public interface InvocationHandler{
 
  42. RPC
 
-[为什么需要RPC，而不是简单的HTTP接口][47]
+[为什么需要RPC，而不是简单的HTTP接口][54]
 
-[ 深入浅出 RPC - 浅出篇][48]
+[ 深入浅出 RPC - 浅出篇][55]
 
-[深入浅出 RPC - 深入篇][49]
+[深入浅出 RPC - 深入篇][56]
 
 远程过程调用属于长连接
 
  43. 枚举
 
-[Java 枚举会比静态常量更消耗内存吗？][50]
+[Java 枚举会比静态常量更消耗内存吗？][57]
 
 枚举的实现原理,就是定义了一个类,实例化final修饰的元素,每个实例都有自己的元信息.比自己定义的常量耗内存,但是枚举可读性,扩展性更好
 
  44. CountDownLatch
 
-[Java CountDownLatch应用][51]
+[Java CountDownLatch应用][58]
 
 原子操作的计数器,如果一个线程调用 CountDownLatch 实例 await() 方法,则必须等到实例通过 countDown() 方法减一,计数为0才能继续执行
 
  45. logback
 
-[logback 常用配置详解（序）logback 简介][52]
+[logback 常用配置详解（序）logback 简介][59]
 
 
 
 
- 46. 
+46. 数据库连接池
+
+[Java 连接池的工作原理][60]
+
+创建一个连接,需要:
+* 检查注册驱动程序
+* 创建Socket连接
+
+[各种数据库连接池对比][61]
+
+![enter description here][62]
+
+[数据库连接池C3P0学习][63]
+
+[【性能】JDBC PreparedStatement和连接池PreparedStatement Cache学习记录][64]
+
+
+47. ThreadLocal
+
+[深入浅出 ThreadLocal][65]
+
+ThreadLocal 为变量在每个线程存一个副本,主要用于非线程安全,但是避免 synchronized 的对象
+
+内部是是一个 ThreadLocalMap,通过哈希的Map.
+
+48. 
+
+
+
+
 
 
 
@@ -633,7 +704,7 @@ public interface InvocationHandler{
 
 1. servlet生命周期及各个方法
 
-[Servlet生命周期与工作原理][53]
+[Servlet生命周期与工作原理][66]
 
 Servlet 生命周期分为三个阶段:
 
@@ -649,7 +720,7 @@ Servlet 容器启动时自动装载 Servlet,创建一个 Servlet 实例并且调
 
 2. servlet中如何自定义filter
 
-[Servlet中的Filter过滤器的介绍和使用][54]
+[Servlet中的Filter过滤器的介绍和使用][67]
 
 
 过滤器是一个程序，它先于与之相关的servlet或JSP页面运行在服务器上。它能够对Servlet容器的请求和响应对象进行检查和修改。
@@ -713,7 +784,7 @@ public void doFilter(ServletRequest request, ServletResponse response,
 
  1. JSP和Servlet的区别
 
-[Jsp 和 Servlet 的区别][55]
+[Jsp 和 Servlet 的区别][68]
 
 * Servlet在Java代码中通过HttpServletResponse对象动态输出HTML内容
 * JSP在静态HTML内容中嵌入Java代码，Java代码被动态执行后生成HTML内容
@@ -721,7 +792,7 @@ public void doFilter(ServletRequest request, ServletResponse response,
 
  2. JSP的动态include和静态include
 
-[JSP动态包含与静态包含][56]
+[JSP动态包含与静态包含][69]
 
 动态INCLUDE用jsp:include动作实现它总是会检查所含文件中的变化，适合用于包含动态页面，并且可以带参数。静态INCLUDE用include伪码实现,定不会检查所含文件的变化，适用于包含静态页面
 
@@ -730,7 +801,7 @@ public void doFilter(ServletRequest request, ServletResponse response,
  3. Struts中请求处理过程
  4. JSP 页面中文乱码
 
-[JSP 中文乱码][57]
+[JSP 中文乱码][70]
 
 
 
@@ -744,13 +815,19 @@ public void doFilter(ServletRequest request, ServletResponse response,
  6. 简述Hibernate常见优化策略
  7. Spring bean的加载过程(推荐看Spring的源码)
  8. Spring如何实现AOP和IOC
- 9. Spring bean注入方式
+
+[AOP 那点事儿][71]
+
+[Spring AOP 实现原理与 CGLIB 应用][72]
+
+ 
+9. Spring bean注入方式
  10. Spring的事务管理(推荐看Spring的源码)
  11. Spring事务的传播特性
  12. springmvc原理
  13. springmvc用过哪些注解
 
-[Java 注解][58]
+[Java 注解][73]
 
 **注解**是插入你代码中的一种注释或者说是一种元数据（meta data）。这些注解信息可以在编译期使用预编译工具进行处理（pre-compiler tools），也可以在运行期使用 Java 反射机制进行处理。
 
@@ -791,13 +868,13 @@ public void doFilter(ServletRequest request, ServletResponse response,
 
 1. zookeeper
 
-[Zookeeper与paxos算法][59]
+[Zookeeper与paxos算法][74]
 
-[ZooKeeper编程(一)][60]
+[ZooKeeper编程(一)][75]
 
-[ZooKeeper伪分布式集群安装及使用][61]
+[ZooKeeper伪分布式集群安装及使用][76]
 
-[ZooKeeper学习第二期--ZooKeeper安装配置][62]
+[ZooKeeper学习第二期--ZooKeeper安装配置][77]
 
 **zookeeper 功能**
 
@@ -851,15 +928,58 @@ zookeeper 提供了一个同步的文件系统和通知机制
 ##  网络：
 
  1. OSI七层模型以及TCP/IP四层模型
+
  2. HTTP和HTTPS区别
+
+[通信协议：HTTP、TCP、UDP][78]
+
+[大型网站的 HTTPS 实践（1）：HTTPS 协议和原理][79]
+
+[HTTP 协议简介][80]
+
+HTTP:超文本传输协议,应用层协议,无状态协议
+
+HTTP请求:请求头和请求体
+
+HTTP响应:响应头和响应体
+
+chunked 传输:每个chunk由两部分组成,第一部分chunk长度,第二部分chunk数据,中间部分用CRLF间隔
+
+HTTPS:是HTTP协议和安全套接口层(SSL)的结合,使HTTP的协议数据在传输过程中更加安全
+
  3. HTTP报文内容
+
  4. get提交和post提交的区别
+
+我们看看GET和POST的区别
+
+1. GET提交的数据会放在URL之后，以?分割URL和传输数据，参数之间以&相连，如EditPosts.aspx?name=test1&id=123456.  POST方法是把提交的数据放在HTTP包的Body中.
+
+2. GET提交的数据大小有限制（因为浏览器对URL的长度有限制），而POST方法提交的数据没有限制.
+
+3. GET方式需要使用Request.QueryString来取得变量的值，而POST方式通过Request.Form来获取变量的值，也就是说Get是通过地址栏来传值，而Post是通过提交表单来传值。
+
+4. GET方式提交数据，会带来安全问题，比如一个登录页面，通过GET方式提交数据时，用户名和密码将出现在URL上，如果页面可以被缓存或者其他人可以访问这台机器，就可以从历史记录获得该用户的账号和密码.
+
  5. get提交是否有字节限制，如果有是在哪限制的
+
+[HTTP中的URL长度限制
+][81]
+
+
+该参数对nginx服务器接受客户端请求的头信息时所分配的最大缓冲区的大小做了限制，也就是nginx服务器一次接受一个客户端请求可就收的最大头信息大小。这个头不仅包含 request-line，还包括通用信息头、请求头域、响应头域的长度总和。这也相当程度的限制了url的长度。
+
  6. TCP的三次握手和四次挥手
+
  7. session和cookie的区别
+
  8. HTTP请求中Session实现原理
+
  9. redirect与forward区别
+
  10. DNS
+
+
  11. TCP和UDP区别
 
 
@@ -867,7 +987,7 @@ zookeeper 提供了一个同步的文件系统和通知机制
 
 1. 模块划分
 
-[Maven最佳实践：划分模块][63]
+[Maven最佳实践：划分模块][82]
 
 父模块需要设置 `<packaging>,<modules>`
 子模块只需要设置 artifcatId
@@ -927,38 +1047,57 @@ zookeeper 提供了一个同步的文件系统和通知机制
   [26]: http://www.cnblogs.com/Bob-FD/archive/2012/09/20/2695458.html
   [27]: https://github.com/pzxwhc/MineKnowContainer/issues/75
   [28]: ./images/1470381246803.jpg "1470381246803.jpg"
-  [29]: http://www.oschina.net/translate/10-java-exception-and-error-interview-questions-answers-programming
-  [30]: http://blog.csdn.net/liuj2511981/article/details/8524418
-  [31]: https://github.com/pzxwhc/MineKnowContainer/issues/7
-  [32]: https://github.com/pzxwhc/MineKnowContainer/issues/16
-  [33]: http://blog.lastww.com/2015/02/04/difference-between-java-lock-and-synchronized/
-  [34]: http://ifeve.com/deadlock/
-  [35]: http://blog.csdn.net/shimiso/article/details/8964414
-  [36]: http://www.hollischuang.com/archives/1140
-  [37]: http://www.infoq.com/cn/articles/serialization-and-deserialization
-  [38]: http://blog.csdn.net/buutterfly/article/details/6617375
-  [39]: http://www.cnblogs.com/sunniest/p/4574080.html
-  [40]: http://www.cnblogs.com/lanxuezaipiao/archive/2013/05/17/3082949.html
-  [41]: http://my.oschina.net/u/242764/blog/482685
-  [42]: http://www.cnblogs.com/CheeseZH/archive/2012/11/28/2791914.html
-  [43]: http://cnn237111.blog.51cto.com/2359144/1131869
-  [44]: http://bliuqing.iteye.com/blog/374977
-  [45]: http://blog.csdn.net/centre10/article/details/6847828
-  [46]: https://www.zhihu.com/question/20794107
-  [47]: http://www.oschina.net/question/271044_2155059
-  [48]: http://blog.csdn.net/mindfloating/article/details/39473807
-  [49]: http://blog.csdn.net/mindfloating/article/details/39474123
-  [50]: https://www.zhihu.com/question/48707169
-  [51]: http://zapldy.iteye.com/blog/746458
-  [52]: http://aub.iteye.com/blog/1101222
-  [53]: http://www.cnblogs.com/cuiliang/archive/2011/10/21/2220671.html
-  [54]: http://www.itzhai.com/java-web-notes-servlet-filters-in-the-filter-writing-the-introduction-and-use-of-filters.html#read-more
-  [55]: https://www.zhihu.com/question/37962386
-  [56]: http://beijishiqidu.iteye.com/blog/1976142
-  [57]: https://www.zhihu.com/question/20212696
-  [58]: http://wiki.jikexueyuan.com/project/java-reflection/java-at.html
-  [59]: http://blog.jobbole.com/45721/
-  [60]: http://www.cnblogs.com/zhangchaoyang/articles/2536178.html%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00
-  [61]: http://blog.fens.me/hadoop-zookeeper-intro/
-  [62]: http://www.cnblogs.com/sunddenly/p/4018459.html
-  [63]: http://juvenshun.iteye.com/blog/305865
+  [29]: http://wangkuiwu.github.io/2012/02/03/collection-03-arraylist/
+  [30]: http://www.oschina.net/translate/10-java-exception-and-error-interview-questions-answers-programming
+  [31]: http://blog.csdn.net/liuj2511981/article/details/8524418
+  [32]: https://github.com/pzxwhc/MineKnowContainer/issues/7
+  [33]: https://github.com/pzxwhc/MineKnowContainer/issues/16
+  [34]: http://blog.lastww.com/2015/02/04/difference-between-java-lock-and-synchronized/
+  [35]: http://ifeve.com/deadlock/
+  [36]: http://blog.csdn.net/shimiso/article/details/8964414
+  [37]: http://blog.jobbole.com/103290/
+  [38]: https://www.zhihu.com/question/19732473
+  [39]: http://www.ibm.com/developerworks/cn/education/java/j-nio/
+  [40]: http://www.hollischuang.com/archives/1140
+  [41]: http://www.infoq.com/cn/articles/serialization-and-deserialization
+  [42]: http://blog.csdn.net/buutterfly/article/details/6617375
+  [43]: http://outofmemory.cn/c/java-outOfMemoryError
+  [44]: https://www.ibm.com/developerworks/cn/java/l-JavaMemoryLeak/
+  [45]: http://www.cnblogs.com/xuxg/archive/2012/08/07/2627411.html
+  [46]: http://www.cnblogs.com/sunniest/p/4574080.html
+  [47]: http://www.cnblogs.com/lanxuezaipiao/archive/2013/05/17/3082949.html
+  [48]: http://my.oschina.net/u/242764/blog/482685
+  [49]: http://www.cnblogs.com/CheeseZH/archive/2012/11/28/2791914.html
+  [50]: http://cnn237111.blog.51cto.com/2359144/1131869
+  [51]: http://bliuqing.iteye.com/blog/374977
+  [52]: http://blog.csdn.net/centre10/article/details/6847828
+  [53]: https://www.zhihu.com/question/20794107
+  [54]: http://www.oschina.net/question/271044_2155059
+  [55]: http://blog.csdn.net/mindfloating/article/details/39473807
+  [56]: http://blog.csdn.net/mindfloating/article/details/39474123
+  [57]: https://www.zhihu.com/question/48707169
+  [58]: http://zapldy.iteye.com/blog/746458
+  [59]: http://aub.iteye.com/blog/1101222
+  [60]: http://www.oschina.net/question/157182_72094
+  [61]: https://github.com/alibaba/druid/wiki/%E5%90%84%E7%A7%8D%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%AF%B9%E6%AF%94
+  [62]: ./images/1472560646490.jpg "1472560646490.jpg"
+  [63]: http://haoran-10.iteye.com/blog/1753332
+  [64]: http://singleant.iteye.com/blog/1298837g
+  [65]: http://blog.jobbole.com/104722/
+  [66]: http://www.cnblogs.com/cuiliang/archive/2011/10/21/2220671.html
+  [67]: http://www.itzhai.com/java-web-notes-servlet-filters-in-the-filter-writing-the-introduction-and-use-of-filters.html#read-more
+  [68]: https://www.zhihu.com/question/37962386
+  [69]: http://beijishiqidu.iteye.com/blog/1976142
+  [70]: https://www.zhihu.com/question/20212696
+  [71]: http://blog.jobbole.com/103213/
+  [72]: http://blog.jobbole.com/28791/
+  [73]: http://wiki.jikexueyuan.com/project/java-reflection/java-at.html
+  [74]: http://blog.jobbole.com/45721/
+  [75]: http://www.cnblogs.com/zhangchaoyang/articles/2536178.html%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00
+  [76]: http://blog.fens.me/hadoop-zookeeper-intro/
+  [77]: http://www.cnblogs.com/sunddenly/p/4018459.html
+  [78]: http://blog.jobbole.com/84429/
+  [79]: http://blog.jobbole.com/86660/
+  [80]: http://blog.jobbole.com/104886/
+  [81]: http://www.cnblogs.com/lengyuhong/archive/2012/02/04/2330130.html
+  [82]: http://juvenshun.iteye.com/blog/305865
